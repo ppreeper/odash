@@ -1,0 +1,2 @@
+# odash
+Odoo Administration Shell
