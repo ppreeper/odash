@@ -1,0 +1,6 @@
+---
+- name: Odoo.service
+  ansible.builtin.template:
+    src: odoo.service
+    dest: /etc/systemd/system/odoo.service
+    mode: "0644"

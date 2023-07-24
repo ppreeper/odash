@@ -1,0 +1,12 @@
+---
+- name: Sshd PasswordAuthentication no
+  ansible.builtin.replace:
+    path: /etc/ssh/sshd_config
+    regexp: "^PasswordAuthentication.*$"
+    replace: "PasswordAuthentication no"
+- name: Restart ssh
+  ansible.builtin.systemd:
+    name: ssh
+    enabled: true
+    daemon_reload: true
+    state: restarted

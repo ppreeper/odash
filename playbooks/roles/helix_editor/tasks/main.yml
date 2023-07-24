@@ -1,0 +1,20 @@
+---
+- name: Add helix dir
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    mode: "0755"
+    owner: "{{ USER }}"
+    group: "{{ USER }}"
+  with_items:
+    - { path: "{{ CONFIGDIR }}/helix" }
+- name: Helixup
+  ansible.builtin.template:
+    src: "helixup"
+    dest: "{{ USERBIN }}/helixup"
+    mode: "0755"
+    owner: "{{ USER }}"
+    group: "{{ USER }}"
+- name: Install helix editor
+  ansible.builtin.command: "{{ USERBIN }}/helixup"
+  become_user: "{{ USER }}"

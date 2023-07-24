@@ -1,0 +1,3 @@
+#!/bin/bash
+mkdir -p "${HOME}/mnt/${1}/${2}/"
+sudo mount -t nfs -o user,async,intr,timeo=15,rsize=16384,wsize=16384 "${1}:${2}" "${HOME}/mnt/${1}/${2}"

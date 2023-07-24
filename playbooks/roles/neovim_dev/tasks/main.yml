@@ -1,0 +1,51 @@
+---
+- name: Nvim init.vim
+  ansible.builtin.template:
+    src: "nvim/init.vim"
+    dest: "{{ config }}/nvim/init.vim"
+    mode: "0644"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+- name: Nvim coc.vim
+  ansible.builtin.template:
+    src: "nvim/coc.vim"
+    dest: "{{ config }}/nvim/coc.vim"
+    mode: "0644"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+- name: Nvim coc settings
+  ansible.builtin.template:
+    src: "nvim/coc-settings.json"
+    dest: "{{ config }}/nvim/coc-settings.json"
+    mode: "0644"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+# coc snippets
+- name: Coc snippets dir
+  ansible.builtin.file:
+    path: "{{ config }}/coc/ultisnips/"
+    state: directory
+    mode: "0755"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+- name: Coc snippets javascript
+  ansible.builtin.template:
+    src: "coc/ultisnips/javascript.snippets"
+    dest: "{{ config }}/coc/ultisnips/"
+    mode: "0644"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+- name: Coc snippets python
+  ansible.builtin.template:
+    src: "coc/ultisnips/python.snippets"
+    dest: "{{ config }}/coc/ultisnips/"
+    mode: "0644"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+- name: Coc snippets xml
+  ansible.builtin.template:
+    src: "coc/ultisnips/xml.snippets"
+    dest: "{{ config }}/coc/ultisnips/"
+    mode: "0644"
+    owner: "{{ user }}"
+    group: "{{ user }}"

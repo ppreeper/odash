@@ -1,0 +1,12 @@
+---
+- name: CLI fs utils
+  ansible.builtin.apt:
+    name:
+      - e2fsprogs
+      - xfsprogs
+      - btrfs-progs
+      - ntfs-3g
+    update_cache: true
+    force: true
+    state: present
+  when: ansible_os_family == 'Debian'

@@ -1,0 +1,32 @@
+---
+- name: Destroy cloud-init Odoo VMs
+  hosts: proxmox
+  tasks:
+    - name: Stop DB VMs
+      ignore_errors: true
+      community.general.proxmox_kvm:
+        api_user: "{{ proxmox_api_user }}"
+        api_password: "{{ proxmox_api_password }}"
+        api_host: "{{ proxmox_api_host }}"
+        node: "{{ proxmox_node }}"
+        name: "{{ item.value.name }}"
+        vmid: "{{ item.value.vmid }}"
+        state: stopped
+        force: true
+        timeout: 30
+      with_items:
+        - "{{ lookup('ansible.builtin.dict', dbnodes) }}"
+    - name: Destroy DB VMs
+      ignore_errors: true
+      community.general.proxmox_kvm:
+        api_user: "{{ proxmox_api_user }}"
+        api_password: "{{ proxmox_api_password }}"
+        api_host: "{{ proxmox_api_host }}"
+        node: "{{ proxmox_node }}"
+        name: "{{ item.value.name }}"
+        vmid: "{{ item.value.vmid }}"
+        state: absent
+        force: true
+        timeout: 30
+      with_items:
+        - "{{ lookup('ansible.builtin.dict', dbnodes) }}"

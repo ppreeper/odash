@@ -1,0 +1,10 @@
+---
+- name: CLI file utils
+  ansible.builtin.apt:
+    name:
+      - mc
+      - fdupes
+      - tree
+      - rename
+    state: present
+  when: ansible_os_family == 'Debian'

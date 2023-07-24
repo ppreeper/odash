@@ -1,0 +1,16 @@
+---
+- name: Apt mirror - debian
+  ansible.builtin.template:
+    src: "sources.debian.list"
+    dest: "/etc/apt/sources.list"
+    mode: "0644"
+  when: ansible_distribution == 'Debian'
+- name: Apt mirror - ubuntu
+  ansible.builtin.template:
+    src: "sources.ubuntu.list"
+    dest: "/etc/apt/sources.list"
+    mode: "0644"
+  when: ansible_distribution == 'Ubuntu'
+- name: Cache update
+  ansible.builtin.apt:
+    update_cache: true

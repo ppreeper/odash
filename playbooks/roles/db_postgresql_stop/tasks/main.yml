@@ -1,0 +1,13 @@
+---
+- name: PostgreSQL default service stop
+  ansible.builtin.systemd:
+    name: postgresql@{{ POSTGRES_VERSION }}-main.service
+    state: stopped
+    enabled: false
+    daemon_reload: true
+- name: PostgreSQL main service stop
+  ansible.builtin.systemd:
+    name: postgresql.service
+    state: stopped
+    enabled: false
+    daemon_reload: true

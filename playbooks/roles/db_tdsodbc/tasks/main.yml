@@ -1,0 +1,11 @@
+---
+- name: TDS mssql
+  ansible.builtin.apt:
+    name:
+      - freetds-bin
+      - freetds-dev
+      - tdsodbc
+      - unixodbc
+      - unixodbc-dev
+    state: present
+  when: ansible_os_family == 'Debian'

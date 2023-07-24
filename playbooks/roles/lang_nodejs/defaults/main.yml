@@ -1,0 +1,7 @@
+---
+HOME: "{{ lookup('env', 'HOME') }}"
+USER: "{{ lookup('env', 'USER') }}"
+CONFIGDIR: "{{ lookup('env', 'HOME') }}/.config"
+LOCALDIR: "{{ lookup('env', 'HOME') }}/.local"
+USERBIN: "{{ lookup('env', 'HOME') }}/.local/bin"
+node_version: 18

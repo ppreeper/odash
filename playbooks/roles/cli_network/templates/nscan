@@ -1,0 +1,34 @@
+#!/bin/bash
+
+case ${1} in
+    "intense")
+        # Intense
+        nmap -T4 -A -v ${2};;
+    "intenseudp")
+        # Intense scan plus UDP
+        nmap -sS -sU -T4 -A -v ${2};;
+    "intenseall")
+        # Intense scan, all TCP ports
+        nmap -p 1-65535 -T4 -A -v ${2};;
+    "intensenoping")
+        # Intense scan, no ping
+        nmap -T4 -A -v -Pn ${2};;
+    "quick")
+        # Quick scan
+        nmap -oG - -PN -T4 -F ${2};;
+    "quickplus")
+        # Quick scan plus
+        nmap -oG - -PN -sV -T4 -F --version-light ${2};;
+    "ping")
+        # Ping scan
+        nmap -oG - -sn ${2};;
+    "traceroute")
+        # Quick traceroute
+        sudo nmap -Pn -sn --traceroute ${2};;
+    "full")
+        #Slow comprehensive scan
+        nmap -sS -sU -T4 -A -v -PE -PP -PS80,443 -PA3389 -PU40125 -PY -g 53 --script "default or (discovery and safe)" ${2};;
+    *)
+        # regular scan
+        nmap ${2};;
+esac

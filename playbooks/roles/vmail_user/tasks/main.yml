@@ -1,0 +1,15 @@
+---
+- name: Create group {{ user }}
+  ansible.builtin.group:
+    name: "{{ user }}"
+    gid: "{{ gid }}"
+    state: present
+- name: Create user {{ user }}
+  ansible.builtin.user:
+    name: "{{ user }}"
+    uid: "{{ uid }}"
+    groups:
+      - "{{ user }}"
+    home: "{{ home }}"
+    ansible.builtin.shell: /usr/sbin/nologin
+    state: present

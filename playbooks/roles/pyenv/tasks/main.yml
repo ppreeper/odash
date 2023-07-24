@@ -1,0 +1,79 @@
+---
+- name: Pyenv pre-requisites
+  ansible.builtin.apt:
+    name:
+      - make
+      - build-essential
+      - libssl-dev
+      - zlib1g-dev
+      - libbz2-dev
+      - libreadline-dev
+      - libsqlite3-dev
+      - wget
+      - curl
+      - llvm
+      - libncursesw5-dev
+      - xz-utils
+      - tk-dev
+      - libxml2-dev
+      - libxmlsec1-dev
+      - libffi-dev
+      - liblzma-dev
+    state: present
+  when: ansible_os_family == 'Debian'
+- name: Pyenv root setup
+  ansible.builtin.file:
+    path: "{{ HOME }}/.pyenv"
+    state: directory
+    owner: "{{ USER }}"
+    group: "{{ USER }}"
+    mode: "0755"
+- name: Pyenv root
+  ansible.builtin.git:
+    repo: "https://github.com/pyenv/pyenv.git"
+    dest: "{{ HOME }}/.pyenv"
+    depth: 1
+    clone: true
+    update: true
+- name: Pyenv plugins pyenv-doctor
+  ansible.builtin.git:
+    repo: "https://github.com/pyenv/pyenv-doctor.git"
+    dest: "{{ HOME }}/.pyenv/plugins/pyenv-doctor"
+    depth: 1
+    clone: true
+    update: true
+- name: Pyenv plugins pyenv-installer
+  ansible.builtin.git:
+    repo: "https://github.com/pyenv/pyenv-installer.git"
+    dest: "{{ HOME }}/.pyenv/plugins/pyenv-installer"
+    depth: 1
+    clone: true
+    update: true
+- name: Pyenv plugins pyenv-update
+  ansible.builtin.git:
+    repo: "https://github.com/pyenv/pyenv-update.git"
+    dest: "{{ HOME }}/.pyenv/plugins/pyenv-update"
+    depth: 1
+    clone: true
+    update: true
+- name: Pyenv plugins pyenv-virtualenv
+  ansible.builtin.git:
+    repo: "https://github.com/pyenv/pyenv-virtualenv.git"
+    dest: "{{ HOME }}/.pyenv/plugins/pyenv-virtualenv"
+    depth: 1
+    clone: true
+    update: true
+- name: Pyenv plugins pyenv-which-ext
+  ansible.builtin.git:
+    repo: "https://github.com/pyenv/pyenv-which-ext.git"
+    dest: "{{ HOME }}/.pyenv/plugins/pyenv-which-ext"
+    depth: 1
+    clone: true
+    update: true
+- name: Cfg 21_pyenv
+  ansible.builtin.template:
+    src: "21_pyenv.cfg"
+    dest: "{{ CONFIGDIR }}/bash/21_pyenv.cfg"
+    mode: "0644"
+    owner: "{{ USER }}"
+    group: "{{ USER }}"

@@ -1,0 +1,35 @@
+---
+- name: Proxmox repo key
+  ansible.builtin.apt_key:
+    url: "http://download.proxmox.com/debian/proxmox-ve-release-6.x.gpg"
+    state: present
+- name: Proxmox repo file stat
+  ansible.builtin.stat:
+    path: "/etc/apt/sources.list.d/pve-install-repo.list"
+- name: Proxmox repo file remove
+  ansible.builtin.file:
+    path: "/etc/apt/sources.list.d/pve-install-repo.list"
+    state: absent
+  when: stat_result.stat.exists
+- name: Proxmox repo
+  ansible.builtin.apt_repository:
+    validate_certs: false
+    repo: "deb [arch=amd64] http://download.proxmox.com/debian/pve buster pve-no-subscription"
+    state: present
+    filename: pve-install-repo
+    update_cache: true
+- name: Proxmox
+  ansible.builtin.apt:
+    name:
+      - proxmox-ve
+      - postfix
+      - open-iscsi
+      - ovmf
+      - openvswitch-switch
+      - zfsutils-linux
+    state: present
+- name: Remove os-prober
+  ansible.builtin.apt:
+    name:
+      - os-prober
+    state: absent

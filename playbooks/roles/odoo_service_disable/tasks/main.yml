@@ -1,0 +1,7 @@
+---
+- name: Odoo service disable
+  ansible.builtin.systemd:
+    name: odoo.service
+    state: stopped
+    enabled: false
+    daemon_reload: true

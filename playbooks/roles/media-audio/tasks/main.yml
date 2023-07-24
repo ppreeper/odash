@@ -1,0 +1,34 @@
+---
+- name: Media audio
+  ansible.builtin.apt:
+    name:
+      - oggz-tools
+      - ogmtools
+      - opus-tools
+      - vorbis-tools
+      - flac
+      - flactag
+      - vpx-tools
+      - cuetools
+      - shntool
+      - sox
+      - mediainfo
+    state: present
+  when: ansible_os_family == 'Debian'
+- name: Media audio cli helpers
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    owner: "{{ USER }}"
+    group: "{{ USER }}"
+  with_items:
+    - { src: "bin/flaccue", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/sox-blueboxtone-generator.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/sox-pinknoise.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/sox-startrekenginewhitenoise.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/sox-touchtone-generator.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/sox-wavesonbeach.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/sox-whitenoise.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/toopus", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/tovorb", dest: "{{ USERBIN }}", mode: "0755" }

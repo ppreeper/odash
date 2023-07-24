@@ -1,0 +1,6 @@
+#!/bin/bash
+MEDIA='/var/data/dvd'
+DRIVE='/dev/sr0'
+DISC=${1}
+TITLE=${2}
+mpv "${DRIVE}" --title="${TITLE}" --stream-dump="${MEDIA}/vob/${DISC}.${TITLE}.vob"

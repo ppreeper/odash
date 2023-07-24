@@ -1,0 +1,6 @@
+---
+home: "{{ lookup('env', 'HOME') }}"
+user: "{{ lookup('env', 'USER') }}"
+config_dir: "{{ lookup('env', 'HOME') }}/.config"
+local_dir: "{{ lookup('env', 'HOME') }}/.local"
+user_bin: "{{ lookup('env', 'HOME') }}/.local/bin"

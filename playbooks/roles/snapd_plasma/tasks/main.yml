@@ -1,0 +1,7 @@
+---
+- name: Snap support
+  ansible.builtin.apt:
+    name:
+      - plasma-discover-backend-snap
+    state: present
+  when: ansible_distribution == "Ubuntu"

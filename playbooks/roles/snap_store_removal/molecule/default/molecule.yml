@@ -1,0 +1,22 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+platforms:
+  - name: snap_store_removal_u1804
+    image: ubuntu:18.04
+  - name: snap_store_removal_u2004
+    image: ubuntu:20.04
+  - name: snap_store_removal_d9
+    image: debian:9
+  - name: snap_store_removal_d10
+    image: debian:10
+provisioner:
+  name: ansible
+verifier:
+  name: ansible

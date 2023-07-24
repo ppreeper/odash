@@ -1,0 +1,9 @@
+---
+- name: Kvm virtualization
+  ansible.builtin.apt:
+    name:
+      - qemu
+      - qemu-efi
+      - virt-viewer
+    state: present
+  when: ansible_os_family == 'Debian'

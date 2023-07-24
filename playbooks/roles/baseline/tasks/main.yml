@@ -1,0 +1,16 @@
+---
+- name: Baseline tools
+  ansible.builtin.apt:
+    name:
+      - sudo
+      - gnupg2
+      - curl
+      - wget
+      - apt-utils
+      - apt-transport-https
+      - git
+      - lsb-release
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  when: ansible_os_family == 'Debian'

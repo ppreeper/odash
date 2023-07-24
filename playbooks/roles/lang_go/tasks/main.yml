@@ -1,0 +1,50 @@
+---
+# requirement
+- name: Git
+  ansible.builtin.apt:
+    name:
+      - git
+    state: present
+  when: ansible_os_family == 'Debian'
+
+# goup installer
+- name: Goup installer
+  ansible.builtin.template:
+    src: "goup"
+    dest: "{{ USERBIN }}/goup"
+    mode: "0755"
+    owner: "{{ USER }}"
+    group: "{{ USER }}"
+
+# install go
+- name: Install go
+  ansible.builtin.command: "{{ USERBIN }}/goup"
+  become_user: "{{ USER }}"
+
+- name: Check bash installed
+  ansible.builtin.stat:
+    path: "/usr/bin/bash"
+  register: stat_bash
+
+- name: Cfg 20_go bash
+  ansible.builtin.template:
+    src: "20_go.cfg"
+    dest: "{{ CONFIGDIR }}/bash/20_go.cfg"
+    mode: "0644"
+    owner: "{{ USER }}"
+    group: "{{ USER }}"
+  when: stat_bash.stat.exists
+
+- name: Check zsh installed
+  ansible.builtin.stat:
+    path: "/usr/bin/zsh"
+  register: stat_zsh
+
+- name: Cfg 20_go zsh
+  ansible.builtin.template:
+    src: "20_go.cfg"
+    dest: "{{ CONFIGDIR }}/zsh/cfg/20_go.cfg"
+    mode: "0644"
+    owner: "{{ USER }}"
+    group: "{{ USER }}"
+  when: stat_zsh.stat.exists

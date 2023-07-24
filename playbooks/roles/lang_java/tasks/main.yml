@@ -1,0 +1,8 @@
+---
+- name: Java
+  ansible.builtin.apt:
+    name:
+      - openjfx
+      - default-jre
+    state: present
+  when: ansible_os_family == 'Debian'

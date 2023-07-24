@@ -1,0 +1,66 @@
+upstream odoo-{{ item.name }} {
+    {% for host in groups [item.name] %}
+    server {{ hostvars[host]['inventory_hostname'] }}:{{ odoo_http_port }} max_fails=3 fail_timeout=30s;
+    {% endfor %}
+}
+
+upstream odoo-{{ item.name }}-im {
+    {% for host in groups [item.name] %}
+    server {{ hostvars[host]['inventory_hostname'] }}:{{ odoo_longpolling_port }} max_fails=3 fail_timeout=30s;
+    {% endfor %}
+}
+
+# http > https
+server {
+    server_name {{ item.hostname }} ;
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name {{ item.hostname }} ;
+
+    ssl_certificate     /etc/ssl/private/tls_crt.pem;
+    ssl_certificate_key /etc/ssl/private/tls_key.pem;
+
+    access_log /var/log/nginx/{{ item.hostname }}_access.log;
+    error_log /var/log/nginx/{{ item.hostname }}_error.log;
+
+    add_header Strict-Transport-Security max-age=15768000;
+
+    # proxy common parameters
+    proxy_buffers        16 64k;
+    proxy_buffer_size    128k;
+    # force timeouts if backend dies
+    proxy_next_upstream error timeout invalid_header http_500 http_502 http_503;
+
+    # set headers
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forward-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Real-IP $remote_addr;
+
+    # set timeouts
+    proxy_read_timeout      3600s;
+    proxy_connect_timeout   3600s;
+    proxy_send_timeout      3600s;
+    send_timeout            3600s;
+
+    location / {
+        proxy_pass http://odoo-{{ item.name }};
+        proxy_redirect off;
+    }
+
+    location /longpolling {
+        proxy_pass http://odoo-{{ item.name }}-im;
+        proxy_redirect off;
+    }
+
+    location ~* /[0-9a-zA-Z_]*/static/ {
+        proxy_cache_valid       200 60m;
+        proxy_buffering         on;
+        expires                 864000;
+        proxy_pass              http://odoo-{{ item.name }};
+    }
+}

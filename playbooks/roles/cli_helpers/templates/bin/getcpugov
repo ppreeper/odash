@@ -1,0 +1,6 @@
+#!/bin/bash
+function getgov() {
+    cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+}
+
+getgov

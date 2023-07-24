@@ -1,0 +1,28 @@
+{
+  "bootstrap_expect": 3,
+  "client_addr": "0.0.0.0",
+  "datacenter": "{{PG_CLUSTER}}",
+  "data_dir": "/var/lib/consul",
+  "domain": "consul",
+  "enable_script_checks": true,
+  "dns_config": {
+    "enable_truncate": true,
+    "only_passing": true
+  },
+  "enable_syslog": true,
+  "encrypt": "{{CONSUL_KEY}}",
+  "leave_on_terminate": true,
+  "log_level": "INFO",
+  "rejoin_after_leave": true,
+  "server": true,
+  "start_join": [
+    {% for host in groups['all'] %}
+    {% if loop.index < loop.length %}
+    "{{hostvars[host].ip_address}}",
+    {% else %}
+    "{{hostvars[host].ip_address}}"
+    {%endif%}
+    {% endfor %}
+  ],
+  "ui": true
+}

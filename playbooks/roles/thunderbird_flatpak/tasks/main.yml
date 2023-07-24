@@ -1,0 +1,5 @@
+---
+- name: Thunderbird
+  community.general.flatpak:
+    name: org.mozilla.Thunderbird
+    state: present

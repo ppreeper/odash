@@ -1,0 +1,74 @@
+#!/bin/bash
+# This script is executed by "recovery_1st_stage" to recovery a Standby node.
+
+set -o xtrace
+
+PRIMARY_NODE_PGDATA="$1"
+DEST_NODE_HOST="$2"
+DEST_NODE_PGDATA="$3"
+PRIMARY_NODE_PORT="$4"
+DEST_NODE_ID="$5"
+DEST_NODE_PORT="$6"
+
+PRIMARY_NODE_HOST=$(hostname)
+PGHOME=/usr/lib/postgresql/{{ POSTGRES_VERSION }}
+PGCTL=$PGHOME/bin/pg_ctlcluster
+ARCHIVEDIR={{ POSTGRES_ARCHIVE }}
+REPLUSER=repl
+REPL_SLOT_NAME=${DEST_NODE_HOST//[-.]/_}
+
+echo recovery_1st_stage: start: pg_basebackup for Standby node $DEST_NODE_ID \
+  $(date) >> /var/log/postgresql/exec.log
+
+## Test passwordless SSH
+ssh -T -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null postgres@${DEST_NODE_HOST} -i ~/.ssh/{{SSH_KEYID}} ls /tmp > /dev/null
+
+if [ $? -ne 0 ]; then
+  echo recovery_1st_stage: passwordless SSH to postgres@${DEST_NODE_HOST} failed. Please setup passwordless SSH.
+  exit 1
+fi
+
+## Get PostgreSQL major version
+PGVERSION=`${PGHOME}/bin/pg_config | grep ^VERSION | awk '{print $4}' | sed 's/\..*//' | sed 's/\([0-9]*\)[a-zA-Z].*/\1/'
+
+## Create replication slot "${REPL_SLOT_NAME}"
+${PGHOME}/bin/psql -h ${PRIMARY_NODE_HOST} -p ${PRIMARY_NODE_PORT} \
+  -c "SELECT pg_create_physical_replication_slot('${REPL_SLOT_NAME}');"  >/dev/null 2>&1
+
+if [ $? -ne 0 ]; then
+  echo ERROR: recovery_1st_stage: create replication slot \"${REPL_SLOT_NAME}\" failed. You may need to create replication slot manually.
+fi
+
+## Execute pg_basebackup to recovery Standby node
+ssh -T -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null postgres@$DEST_NODE_HOST -i ~/.ssh/{{SSH_KEYID}} "
+
+    set -o errexit
+
+    sudo systemctl stop postgresql.service
+
+    rm -rf $DEST_NODE_PGDATA
+    rm -rf $ARCHIVEDIR/*
+
+    ${PGHOME}/bin/pg_basebackup -h $PRIMARY_NODE_HOST -U $REPLUSER -p $PRIMARY_NODE_PORT -D $DEST_NODE_PGDATA -X stream
+
+    echo primary_conninfo = 'host=$PRIMARY_NODE_HOST port=$PRIMARY_NODE_PORT user=$REPLUSER' > /etc/postgresql/${PGVERSION}/{{POSTGRES_CLUSTER}}
+    touch ${DEST_NODE_PGDATA}/standby.signal
+    cp /etc/pgpool2/recovery_1st_stage $DEST_NODE_PGDATA/recovery_1st_stage
+
+    sudo systemctl start postgresql.service
+"
+
+if [ $? -ne 0 ]; then
+    # ${PGHOME}/bin/psql -h ${PRIMARY_NODE_HOST} -p ${PRIMARY_NODE_PORT} \
+    #     -c "SELECT pg_drop_replication_slot('${REPL_SLOT_NAME}');"  >/dev/null 2>&1
+
+    # if [ $? -ne 0 ]; then
+    #     echo ERROR: recovery_1st_stage: drop replication slot \"${REPL_SLOT_NAME}\" failed. You may need to drop replication slot manually.
+    # fi
+
+    echo ERROR: recovery_1st_stage: end: pg_basebackup failed. online recovery failed
+    exit 1
+fi
+
+echo recovery_1st_stage: end: recovery_1st_stage is completed successfully
+exit 0

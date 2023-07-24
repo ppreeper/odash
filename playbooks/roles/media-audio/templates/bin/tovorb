@@ -1,0 +1,4 @@
+#!/bin/bash
+FILE="${1}"
+AUD="$(echo ${FILE%.*})"
+ffmpeg -i "$FILE" -vn -c:a vorbis -strict -2 -y "$AUD.ogg"

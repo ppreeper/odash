@@ -1,0 +1,19 @@
+---
+- name: Import signing key
+  ansible.builtin.apt_key:
+    url: "https://dl.google.com/linux/linux_signing_key.pub"
+    keyring: /etc/apt/trusted.gpg.d/google.gpg
+  when: ansible_os_family == 'Debian'
+- name: Google chrome repo
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
+    state: present
+    filename: google-chrome
+    update_cache: true
+  when: ansible_os_family == 'Debian'
+- name: Google chrome
+  ansible.builtin.apt:
+    name:
+      - google-chrome-stable
+    state: present
+  when: ansible_os_family == 'Debian'

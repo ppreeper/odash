@@ -1,0 +1,28 @@
+---
+- name: VScodium extensions
+  ansible.builtin.command: "codium --install-extension {{ item.pkg }}"
+  become_user: "{{ user }}"
+  with_items:
+    - { pkg: "aaron-bond.better-comments" }
+    - { pkg: "asciidoctor.asciidoctor-vscode" }
+    - { pkg: "bradlc.vscode-tailwindcss" }
+    - { pkg: "csstools.postcss" }
+    - { pkg: "dbaeumer.vscode-eslint" }
+    - { pkg: "ecmel.vscode-html-css" }
+    - { pkg: "esbenp.prettier-vscode" }
+    - { pkg: "GitHub.vscode-pull-request-github" }
+    - { pkg: "golang.go" }
+    - { pkg: "Gruntfuggly.todo-tree" }
+    - { pkg: "mechatroner.rainbow-csv" }
+    - { pkg: "mhutchie.git-graph" }
+    - { pkg: "ms-azuretools.vscode-docker" }
+    - { pkg: "ms-python.python" }
+    - { pkg: "ms-vscode.makefile-tools" }
+    - { pkg: "rangav.vscode-thunder-client" }
+    - { pkg: "redhat.ansible" }
+    - { pkg: "redhat.vscode-xml" }
+    - { pkg: "redhat.vscode-yaml" }
+    - { pkg: "ritwickdey.LiveServer" }
+    - { pkg: "rust-lang.rust-analyzer" }
+    - { pkg: "svelte.svelte-vscode" }
+    - { pkg: "syler.sass-indented" }

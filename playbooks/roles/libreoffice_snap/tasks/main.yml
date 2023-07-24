@@ -1,0 +1,6 @@
+---
+- name: Libreoffice lang
+  community.general.snap:
+    name: libreoffice
+    state: present
+  when: ansible_distribution == "Ubuntu"

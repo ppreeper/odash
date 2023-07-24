@@ -1,0 +1,5 @@
+---
+- name: MS Teams client
+  ansible.builtin.apt:
+    deb: "https://go.microsoft.com/fwlink/p/?LinkID=2112886&clcid=0x1009&culture=en-ca&country=CA"
+    state: present

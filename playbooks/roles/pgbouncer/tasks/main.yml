@@ -1,0 +1,20 @@
+---
+- name: Pgbouncer install
+  ansible.builtin.apt:
+    name: pgbouncer
+    state: present
+  when: ansible_os_family == 'Debian'
+- name: Pgbouncer config
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    owner: "root"
+    group: "root"
+  with_items:
+    - { src: "pgbouncer.ini", dest: "/etc/pgbouncer", mode: "0644" }
+    - { src: "userlist.txt", dest: "/etc/pgbouncer", mode: "0644" }
+- name: Pgbouncer restart
+  ansible.builtin.systemd:
+    name: pgbouncer
+    state: restarted

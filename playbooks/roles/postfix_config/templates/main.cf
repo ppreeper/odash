@@ -1,0 +1,114 @@
+####
+# application locations
+mail_owner = postfix
+setgid_group = postdrop
+
+#hostname
+myorigin = /etc/mailname
+myhostname = {{inventory_hostname}}
+mydestination = $myhostname, dmail.preeper.org, localhost
+# mydestination = localhost
+smtpd_banner =  ESMTP
+# smtpd_banner = $myhostname ESMTP $mail_name
+biff = no
+
+# appending .domain is the MUA's job.
+append_dot_mydomain = no
+
+#network
+inet_interfaces = all
+inet_protocols = all
+relayhost =
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
+
+# disable email harvesting and login username harvesting
+disable_vrfy_command = yes
+unverified_sender_reject_reason = Address verification failed
+
+####
+# SMTPAUTH
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_security_options = noanonymous
+smtpd_sasl_local_domain =
+broken_sasl_auth_clients=yes
+
+####
+# smtpd stage eval order
+# smtpd_client_restrictions = permit_mynetworks,reject_unauth_pipelining
+# smtpd_helo_restrictions
+smtpd_sender_restrictions =
+    reject_unknown_sender_domain
+# smtpd_helo_restrictions
+smtpd_recipient_restrictions =
+    permit_mynetworks,
+    permit_auth_destination,
+    permit_sasl_authenticated,
+    reject
+smtpd_data_restrictions =
+    permit_sasl_authenticated,
+    permit_mynetworks,
+    reject_unauth_pipelining,
+    permit
+smtpd_end_of_data_restrictions =
+    permit_sasl_authenticated,
+    permit_mynetworks
+# smtpd_etrn_restrictions
+# smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+
+
+####
+# Setup basic SMTP attrs
+smtpd_soft_error_limit = 2
+smtpd_error_sleep_time = ${stress?0}${stress:10s}
+smtpd_hard_error_limit = ${stress?3}${stress:20}
+smtpd_recipient_limit = 100
+smtpd_timeout = ${stress?30}${stress:300}
+smtpd_delay_reject = no
+# show thyself. if you are not showing yourself, you make me wonder...
+smtpd_helo_required = yes
+
+
+####
+# TLS
+smtpd_use_tls = yes
+smtpd_tls_cert_file = /etc/letsencrypt/live/{{inventory_hostname}}/fullchain.pem
+smtpd_tls_key_file = /etc/letsencrypt/live/{{inventory_hostname}}/privkey.pem
+smtpd_tls_session_cache_database = btree:/smtpd_scache
+smtpd_tls_mandatory_protocols = !SSLv2, !SSLv3
+# smtpd_tls_dh1024_param_file = /etc/ssl/dhparams.pem
+smtpd_tls_ciphers = high
+smtpd_tls_exclude_ciphers = aNULL, eNULL, EXPORT, RC4, MD5, DES, 3DES, aECDH, EDH-DSS-DES-CBC3-SHA, EDH-RSA-DES-CBC3-SHA, KRB5-DES, CBC3-SHA
+smtpd_tls_mandatory_ciphers = high
+smtpd_tls_mandatory_exclude_ciphers = RC4, MD5, DES
+# smtpd_tls_security_level=may
+
+####
+# milter
+smtpd_milters = inet:localhost:11332
+milter_default_action = accept
+milter_protocol = 6
+milter_mail_macros = i {mail_addr} {client_addr} {client_name} {auth_authen}
+
+#Virtual
+virtual_alias_maps = proxy:pgsql:/etc/postfix/virtual_alias_maps.cf
+virtual_mailbox_domains=proxy:pgsql:/etc/postfix/virtual_mailbox_domains.cf
+virtual_mailbox_maps=proxy:pgsql:/etc/postfix/virtual_mailbox_maps.cf
+virtual_mailbox_base={{home}}
+virtual_mailbox_limit=512000000
+virtual_minimum_uid={{uid}}
+virtual_transport={{user}}
+virtual_uid_maps=static:{{uid}}
+virtual_gid_maps=static:{{gid}}
+
+#Recipient Maps
+local_transport=virtual
+local_recipient_maps=
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+
+#Transports
+transport_maps=hash:/etc/postfix/transport
+
+compatibility_level = 3.6

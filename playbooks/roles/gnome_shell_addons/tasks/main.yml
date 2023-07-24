@@ -1,0 +1,8 @@
+---
+- name: Gnome addons
+  ansible.builtin.apt:
+    name:
+      - chrome-gnome-shell
+      - gnome-tweaks
+    state: present
+  when: ansible_os_family == 'Debian'

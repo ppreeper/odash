@@ -1,0 +1,18 @@
+---
+- name: Docker compose
+  ansible.builtin.pip:
+    executable: pip3
+    name:
+      - docker-compose
+    state: present
+- name: CLI helpers
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    owner: "{{ USER }}"
+    group: "{{ USER }}"
+  with_items:
+    - { src: "bin/dapp", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/dockreset", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/genregcred", dest: "{{ USERBIN }}", mode: "0755" }

@@ -1,0 +1,21 @@
+#!/bin/bash
+FONTDIR="${HOME}/.local/share/fonts"
+REPO="https://github.com/ryanoasis/nerd-fonts"
+TAGFILTER="refs/tags"
+FONT="${1}"
+
+vers=$(git ls-remote --tags $REPO | grep "refs/tags" | sed 's/refs\/tags\///' | grep -v -e "{}" -e "RC" | awk '{print $2}' | sort -V | uniq | tail -1)
+
+echo $vers
+
+function download(){
+    echo "download $1 font"
+    V=$(echo $vers | sed 's/v//')
+    rm -f /tmp/${vers}-$1.zip
+    wget -qc ${REPO}/releases/download/${vers}/$1.zip -O /tmp/${vers}-$1.zip
+    mkdir -p ${FONTDIR}
+    unzip -qo -d ${FONTDIR} /tmp/${vers}-$1.zip
+    rm -f /tmp/${vers}-$1.zip
+}
+
+download $FONT

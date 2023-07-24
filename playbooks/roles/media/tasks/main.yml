@@ -1,0 +1,87 @@
+---
+- name: Image tools (system)
+  ansible.builtin.apt:
+    name:
+      - jpegoptim
+      - pngquant
+      - gifsicle
+    state: present
+  when: ansible_os_family == 'Debian'
+- name: Image tools (npm)
+  community.general.npm:
+    name: svgo
+    global: true
+    state: present
+- name: AV codec lib
+  ansible.builtin.apt:
+    name:
+      - gstreamer1.0-libav
+      - gstreamer1.0-plugins-good
+      - gstreamer1.0-plugins-bad
+      - gstreamer1.0-plugins-ugly
+      - libavcodec-extra
+  when: ansible_os_family == 'Debian'
+- name: AV tools
+  ansible.builtin.apt:
+    name:
+      - ffmpeg
+      - oggz-tools
+      - ogmtools
+      - opus-tools
+      - vorbis-tools
+      - flac
+      - mkvtoolnix
+      - vpx-tools
+      - cuetools
+      - shntool
+      - sox
+      - dvdbackup
+      - vobcopy
+      - mediainfo
+    state: present
+  when: ansible_os_family == 'Debian'
+- name: AV cli helpers
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    owner: "{{ USER }}"
+    group: "{{ USER }}"
+  with_items:
+    - { src: "bin/conv.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/convwebm", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/cpy2mp4", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/crop2mp4", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/cropdetect", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/cropvid2mp4", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/cropvob2mp4.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/crp2mp4", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/drip", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/dvd2rip", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/dvd2vob", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/flaccue", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/imageopt", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/iso2vob", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/mp42mp4", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/rip2vob", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/sox-blueboxtone-generator.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/sox-pinknoise.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/sox-startrekenginewhitenoise.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/sox-touchtone-generator.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/sox-wavesonbeach.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/sox-whitenoise.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/toopus", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/tovorb", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/v2mp4", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/va.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vc.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vhfa.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vhfc.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vhf.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vid2mp4", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vid2srt", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vid2webm", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vidrotate90clock", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vob2mp4", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vpx1pfast", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vr.sh", dest: "{{ USERBIN }}", mode: "0755" }

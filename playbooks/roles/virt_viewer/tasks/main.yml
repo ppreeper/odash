@@ -1,0 +1,7 @@
+---
+- name: Virt-viewer
+  ansible.builtin.apt:
+    name:
+      - virt-viewer
+    state: present
+  when: ansible_os_family == 'Debian'

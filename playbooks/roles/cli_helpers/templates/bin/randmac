@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+SET1=00
+SET2=50
+SET3=56
+SET4=`</dev/urandom tr -dc A-F0-9 | head -c2`
+SET5=`</dev/urandom tr -dc A-F0-9 | head -c2`
+SET6=`</dev/urandom tr -dc A-F0-9 | head -c2`
+echo $SET1:$SET2:$SET3:$SET4:$SET5:$SET6

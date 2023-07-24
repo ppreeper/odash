@@ -1,0 +1,35 @@
+---
+- name: Dependencies
+  ansible.builtin.apt:
+    name:
+      - curl
+      - openssh-server
+      - ca-certificates
+    state: present
+  when: ansible_os_family == 'Debian'
+- name: Postfix
+  ansible.builtin.apt:
+    name:
+      - postfix
+    state: present
+  when: ansible_os_family == 'Debian'
+- name: Download install script
+  ansible.builtin.get_url:
+    url: https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh
+    dest: "{{ USERBIN }}/script.deb.sh"
+    mode: "0755"
+    group: "{{ USER }}"
+    owner: "{{ USER }}"
+  when: ansible_os_family == 'Debian'
+- name: Run install script
+  ansible.builtin.command: "{{ USERBIN }}/script.deb.sh"
+  become_user: root
+  when: ansible_os_family == 'Debian'
+- name: Install gitlab
+  environment:
+    EXTERNAL_URL: "{{ schema }}://{{ inventory_hostname }}.{{ domain }}"
+  ansible.builtin.apt:
+    name:
+      - gitlab-ce
+    state: present
+  when: ansible_os_family == 'Debian'

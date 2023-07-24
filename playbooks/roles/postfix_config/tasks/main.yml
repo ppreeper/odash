@@ -1,0 +1,31 @@
+---
+- name: Copy config
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    owner: root
+    group: root
+  with_items:
+    - { src: "main.cf", dest: "/etc/postfix/", mode: "0644" }
+    - { src: "submission_header_checks", dest: "/etc/postfix/", mode: "0644" }
+    - { src: "transport", dest: "/etc/postfix/", mode: "0644" }
+    - { src: "virtual_alias_maps.cf", dest: "/etc/postfix/", mode: "0644" }
+    - { src: "virtual_mailbox_domains.cf", dest: "/etc/postfix/", mode: "0644" }
+    - { src: "virtual_mailbox_maps.cf", dest: "/etc/postfix/", mode: "0644" }
+- name: Master.cf
+  ansible.builtin.blockinfile:
+    path: /etc/postfix/master.cf
+    marker: "# {mark} custom settings"
+    block: |
+      submission inet  n       -       y       -       -       smtpd
+        -o syslog_name=postfix/submission
+        -o smtpd_tls_security_level=encrypt
+        -o smtpd_sasl_auth_enable=yes
+      smtps      inet  n       -       y       -       -       smtpd
+        -o syslog_name=postfix/smtps
+        -o smtpd_tls_wrappermode=yes
+        -o smtpd_sasl_auth_enable=yes
+      cleanup    unix  n       -       y       -       0       cleanup
+      subcleanup unix  n       -       y       -       0       cleanup
+        -o header_checks=regexp:/etc/postfix/submission_header_checks

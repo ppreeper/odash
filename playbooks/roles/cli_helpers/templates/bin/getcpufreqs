@@ -1,0 +1,21 @@
+#!/bin/bash
+
+function getfreqs() {
+    if [ -f "${1}/cpufreq/cpuinfo_min_freq" ]; then
+        fmin=$(cat ${1}/cpufreq/cpuinfo_min_freq)
+    fi
+    if [ -f "${1}/cpufreq/cpuinfo_max_freq" ]; then
+        fmax=$(cat ${1}/cpufreq/cpuinfo_max_freq)
+    fi
+    if [ -f "${1}/cpufreq/cpuinfo_cur_freq" ]; then
+        fcur=$(cat ${1}/cpufreq/cpuinfo_cur_freq)
+    fi
+    echo $fmin $fcur $fmax
+}
+
+CPUS=`find /sys/devices/system/cpu -maxdepth 1 -type d -name "cpu*[0-9]"`
+
+for c in $CPUS; 
+do
+    getfreqs ${c}
+done

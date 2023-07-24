@@ -1,0 +1,10 @@
+---
+- name: Remmina
+  ansible.builtin.apt:
+    name:
+      - remmina
+      - remmina-plugin-rdp
+      - remmina-plugin-vnc
+      - remmina-plugin-spice
+    state: present
+  when: ansible_os_family == 'Debian'

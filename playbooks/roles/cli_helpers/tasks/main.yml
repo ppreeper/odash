@@ -1,0 +1,36 @@
+---
+- name: CLI helpers
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    owner: "{{ USER }}"
+    group: "{{ USER }}"
+  with_items:
+    - { src: "bin/addtohosts", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/check_zombie_procs", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/cht.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/cpucheck", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/deskinfo", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/dfm", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/disklife", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/dm", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/dnscheck", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/ds", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/filehasher.py", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/gencsr-ec.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/gencsr.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/genself.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/getcpufreqs", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/getcpugov", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/gotopup", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/hostfilereset.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/instcert.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/ipv6range", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/listports", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/randgen", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/randmac", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/randpass", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/renamer.py", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/setcpugov", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/uptimecalc.py", dest: "{{ USERBIN }}", mode: "0755" }

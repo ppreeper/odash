@@ -1,0 +1,39 @@
+---
+- name: Ruby
+  ansible.builtin.apt:
+    name:
+      - ruby
+    state: present
+    update_cache: true
+  when: ansible_os_family == 'Debian'
+- name: Cfg gemrc
+  ansible.builtin.template:
+    src: "cfg/gemrc"
+    dest: "{{ HOME }}/.gemrc"
+    mode: "0640"
+    owner: "{{ USER }}"
+    group: "{{ USER }}"
+- name: Check bash installed
+  ansible.builtin.stat:
+    path: "/usr/bin/bash"
+  register: stat_bash
+- name: Cfg 20_ruby bash
+  ansible.builtin.template:
+    src: "20_ruby.cfg"
+    dest: "{{ CONFIGDIR }}/cfg/20_ruby.cfg"
+    mode: "0640"
+    owner: "{{ USER }}"
+    group: "{{ USER }}"
+  when: stat_bash.stat.exists
+- name: Check zsh installed
+  ansible.builtin.stat:
+    path: "/usr/bin/zsh"
+  register: stat_zsh
+- name: Cfg 20_ruby zsh
+  ansible.builtin.template:
+    src: "20_ruby.cfg"
+    dest: "{{ CONFIGDIR }}/zsh/cfg/20_ruby.cfg"
+    mode: "0640"
+    owner: "{{ USER }}"
+    group: "{{ USER }}"
+  when: stat_zsh.stat.exists

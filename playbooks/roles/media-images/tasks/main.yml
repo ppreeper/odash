@@ -1,0 +1,23 @@
+---
+- name: Image tools (system)
+  ansible.builtin.apt:
+    name:
+      - jpegoptim
+      - pngquant
+      - gifsicle
+    state: present
+  when: ansible_os_family == 'Debian'
+- name: Image tools (npm)
+  community.general.npm:
+    name: svgo
+    global: true
+    state: present
+- name: Media image cli helpers
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    owner: "{{ USER }}"
+    group: "{{ USER }}"
+  with_items:
+    - { src: "bin/imageopt", dest: "{{ USERBIN }}", mode: "0755" }

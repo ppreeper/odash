@@ -1,0 +1,24 @@
+---
+- name: Virtualbox repo key
+  ansible.builtin.apt_key:
+    url: "http://download.virtualbox.org/virtualbox/debian/oracle_vbox_2016.asc"
+    state: present
+  when: ansible_os_family == 'Debian'
+- name: Virtualbox repository stat
+  ansible.builtin.stat:
+    path: "/etc/apt/sources.list.d/virtualbox.list"
+  register: stat_result
+  when: ansible_os_family == 'Debian'
+- name: Virtualbox repository remove
+  ansible.builtin.file:
+    path: "/etc/apt/sources.list.d/virtualbox.list"
+    state: absent
+  when: stat_result.stat.exists and ansible_os_family == 'Debian'
+- name: Virtualbox repository add
+  ansible.builtin.apt_repository:
+    validate_certs: false
+    repo: "deb [arch=amd64] http://download.virtualbox.org/virtualbox/debian {{ ansible_lsb.codename | lower }} contrib non-free"
+    state: present
+    filename: virtualbox
+    update_cache: true
+  when: ansible_os_family == 'Debian'

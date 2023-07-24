@@ -1,0 +1,25 @@
+---
+- name: Nginx config
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    owner: "root"
+    group: "root"
+  with_items:
+    - { src: "odoo.conf", dest: "/etc/nginx/sites-available/odoo", mode: "0644" }
+- name: Remove default
+  ansible.builtin.file:
+    path: "/etc/nginx/sites-enabled/default"
+    state: absent
+- name: Enable config
+  ansible.builtin.file:
+    src: "/etc/nginx/sites-available/odoo"
+    dest: "/etc/nginx/sites-enabled/odoo"
+    state: link
+- name: Nginx restart
+  ansible.builtin.systemd:
+    name: nginx
+    enabled: true
+    daemon_reload: true
+    state: restarted

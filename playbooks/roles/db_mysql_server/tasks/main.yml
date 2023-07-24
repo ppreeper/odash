@@ -1,0 +1,7 @@
+---
+- name: Mysql server
+  ansible.builtin.apt:
+    name:
+      - mysql-server
+    state: present
+  when: ansible_os_family == 'Debian'

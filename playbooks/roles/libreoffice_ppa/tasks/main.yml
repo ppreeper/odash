@@ -1,0 +1,31 @@
+---
+- name: Libreoffice repository stat
+  ansible.builtin.stat:
+    path: "/etc/apt/sources.list.d/libreoffice.list"
+  register: stat_result
+  when: ansible_distribution == "Ubuntu"
+- name: Libreoffice repository remove
+  ansible.builtin.file:
+    path: "/etc/apt/sources.list.d/libreoffice.list"
+    state: absent
+  when: stat_result.stat.exists
+- name: Libreoffice repository add
+  ansible.builtin.apt_repository:
+    validate_certs: false
+    repo: "ppa:libreoffice/ppa"
+    state: present
+    filename: libreoffice
+  when: ansible_distribution == "Ubuntu"
+- name: Libreoffice repository amd64
+  ansible.builtin.replace:
+    path: "/etc/apt/sources.list.d/libreoffice.list"
+    regexp: 'deb[ \t].*http'
+    replace: 'deb [arch=amd64] http'
+  when: ansible_distribution == "Ubuntu"
+- name: Libreoffice
+  ansible.builtin.apt:
+    name:
+      - libreoffice
+    state: present
+    update_cache: true
+  when: ansible_distribution == "Ubuntu"

@@ -1,0 +1,5 @@
+# postgres commands for db vip
+postgres ALL=NOPASSWD: /sbin/ip
+postgres ALL=NOPASSWD: /usr/sbin/arping
+postgres ALL=NOPASSWD: /usr/bin/systemctl
+postgres ALL=NOPASSWD: /usr/bin/journalctl

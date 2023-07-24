@@ -1,0 +1,5 @@
+#!/bin/bash
+MEDIA="/var/data/dvd"
+DISC="${1}"
+TITLE="${2}"
+ffmpeg -i "${MEDIA}/vob/${DISC}.${TITLE}.vob" -map 0:v -map 0:a:0 -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -c:v libx264 -q:v -1 -threads 8 -c:a aac -ac 2 -q:a 4 -strict -2 -f mp4 -y "${MEDIA}/enc/${DISC}.${TITLE}.mp4"

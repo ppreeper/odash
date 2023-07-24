@@ -1,0 +1,9 @@
+---
+- name: Postgresql service stop
+  ansible.builtin.systemd:
+    name: postgresql.service
+    state: stopped
+- name: Postgresql service start
+  ansible.builtin.systemd:
+    name: postgresql.service
+    state: started

@@ -1,0 +1,383 @@
+# Odoo XML
+snippet xml
+<?xml version="1.0" encoding="utf-8"?>
+$0
+endsnippet
+snippet odoo
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+$0
+
+</odoo>
+endsnippet
+snippet data
+<data>
+$0
+</data>
+endsnippet
+snippet menuroot
+<menuitem id="model_name_menu" name="name" sequence="10" />
+endsnippet
+snippet menuitem
+<menuitem id="model_name_menu" name="name" sequence="10" action="action_id" groups="groups_id" parent="parent_id"/>
+endsnippet
+snippet form
+<record id="model_name_view_form" model="ir.ui.view">
+<field name="name">model.name.view.form</field>
+<field name="model">model.name</field>
+<field name="arch" type="xml">
+<form string="">
+<sheet>
+<group>
+$0
+</group>
+</sheet>
+</form>
+</field>
+</record>
+endsnippet
+snippet list
+<record id="model_name_view_tree" model="ir.ui.view">
+<field name="name">model.name.view.tree</field>
+<field name="model">model.name</field>
+<field name="arch" type="xml">
+<tree string="">
+$0 
+</tree>
+</field>
+</record>
+endsnippet
+snippet kanban
+<record id="model_name_view_kanban" model="ir.ui.view">
+<field name="name">model.name.view.kanban</field>
+<field name="model">model.name</field>
+<field name="arch" type="xml">
+<kanban>
+<templates>
+<t t-name="kanban-box">
+$0
+</t>
+</templates>
+</kanban>
+</field>
+</record>
+endsnippet
+snippet search
+<record id="model_name_view_search" model="ir.ui.view">
+<field name="name">model.name.view.search</field>
+<field name="model">model.name</field>
+<field name="arch" type="xml">
+<search string="">
+$0
+</search>
+</field>
+</record>
+endsnippet
+snippet calendar
+<record id="model_name_view_calendar" model="ir.ui.view">
+<field name="name">model.name.view.calendar</field>
+<field name="model">model.name</field>
+<field name="arch" type="xml">
+<calendar string="" date_start="date_start_field" color="color_field">
+$0
+</calendar>
+</field>
+</record>
+endsnippet
+snippet cohort
+<record id="model_name_view_cohort" model="ir.ui.view">
+<field name="name">model.name.view.cohort</field>
+<field name="model">model.name</field>
+<field name="arch" type="xml">
+<cohort string="" date_start="date_start_field" date_stop="date_stop_field">
+			$0
+</cohort>
+</field>
+</record>
+endsnippet
+snippet gantt
+<record id="model_name_view_gantt" model="ir.ui.view">
+<field name="name">model.name.view.gantt</field>
+<field name="model">model.name</field>
+<field name="arch" type="xml">
+<gantt string="" date_start="date_start_field" date_stop="date_stop_field">
+		$0
+</gantt>
+</field>
+</record>
+endsnippet
+snippet graph
+<record id="model_name_view_graph" model="ir.ui.view">
+<field name="name">model.name.view.graph</field>
+<field name="model">model.name</field>
+<field name="arch" type="xml">
+<graph string="" type="bar">
+$0
+</graph>
+</field>
+</record>
+endsnippet
+snippet pivot
+<record id="model_name_view_pivot" model="ir.ui.view">
+<field name="name">model.name.view.pivot</field>
+<field name="model">model.name</field>
+<field name="arch" type="xml">
+<pivot string="" disable_linking="true">
+$0
+</pivot>
+</field>
+</record>
+endsnippet
+snippet activity
+<record id="model_name_view_activity" model="ir.ui.view">
+<field name="name">model.name.view.activity</field>
+<field name="model">model.name</field>
+<field name="arch" type="xml">
+<activity string="">
+<templates>
+<div t-name="activity-box">
+$0
+</div>
+</templates>
+</activity>
+</field>
+</record>
+endsnippet
+snippet qweb
+<record id="model_name_view_qweb" model="ir.ui.view">
+<field name="name">model.name.view.qweb</field>
+<field name="model">model.name</field>
+<field name="type">qweb</field>
+<field name="arch" type="xml">
+$0
+</field>
+</record>
+endsnippet
+snippet viewInherit
+<record id="inherit_view_id_inherit_module_name" model="ir.ui.view">
+<field name="name">model.name.view.form.inherit</field>
+<field name="model">model.name</field>
+<field name="inherit_id" ref="inherit_module_name.inherit_view_id"/>
+<field name="arch" type="xml">
+$0
+</field>
+</record>
+endsnippet
+snippet buttonHeader
+<button string="$0" name="action_name" type="object" class="oe_highlight"/>
+endsnippet
+snippet buttonBox
+<div class="oe_button_box" name="button_box">
+<button name="action_name" type="object" class="oe_stat_button" icon="fa-">
+<field name="field_name" string="" widget="statinfo"/>
+</button>
+</div>
+endsnippet
+snippet buttonStat
+<button name="${1:action_name}" type="${2:object}" class="oe_stat_button" icon="fa-$3">
+<field name="${4:field_name}" string="$5" widget="statinfo"/>
+</button>
+endsnippet
+snippet field
+<field name="$0"/>
+endsnippet
+snippet notebook
+<notebook>
+<page name="${1:name}" string="${2:string}">
+$0
+</page>
+</notebook>
+endsnippet
+snippet page
+<page name="${1:name}" string="${2:string}">
+$0
+</page>
+endsnippet
+snippet chatter
+<div class="oe_chatter">
+<field name="message_follower_ids" widget="mail_followers"/>
+<field name="activity_ids" widget="mail_activity"/>
+<field name="message_ids" widget="mail_thread"/>
+</div>
+endsnippet
+snippet action
+<record id="model_name_action" model="ir.actions.act_window">
+<field name="name">Action Name</field>
+<field name="res_model">model.name</field>
+<field name="view_type">form</field>
+<field name="view_mode">tree,form</field>
+<field name="domain">[]</field>
+<field name="context">{}</field>
+<field name="help" type="html">
+$0
+</field>
+</record>
+endsnippet
+snippet actionClient
+<record id="action_action_name" model="ir.actions.client">
+<field name="name">Action Name</field>
+<field name="tag">action_tag_name</field>
+<field name="target">main</field>
+</record>
+endsnippet
+snippet actionReport
+<report
+id="action_report_model_name"
+model="model.name"
+string="Report name"
+report_type="qweb-pdf"
+name="module_name.report_template_name"
+file="module_name.report_template_name"
+/>
+endsnippet
+snippet actionServer
+<record id="model_name_action_server" model="ir.actions.server">
+<field name="name">Action Name</field>
+<field name="model_id" ref="model_model_name"/>
+<field name="binding_model_id" ref="model_model_name"/>
+<field name="state">code</field>
+<field name="code"></field>
+</record>
+endsnippet
+snippet actionUrl
+<record id="action_action_name" model="ir.actions.act_url">
+<field name="name">Action Name</field>
+<field name="url">url</field>
+<field name="target">new</field>
+</record>
+endsnippet
+snippet actionView
+<record id="action_action_view_name" model="ir.actions.act_window.view">
+<field name="sequence" eval="1"/>
+<field name="view_mode">view_name</field>
+<field name="act_window_id" ref="action_id"/>
+<field name="view_id" ref="view_id"/>
+</record>
+endsnippet
+snippet report
+<template id="report_template_name">
+<t t-call="web.html_container">
+<t t-foreach="docs" t-as="doc">
+<t t-call="web.external_layout">
+<div class="page">
+
+</div>
+</t>
+</t>
+</t>
+</template>
+endsnippet
+snippet cron
+<record id="model_name_cron" model="ir.cron">
+<field name="name">Cron Name</field>
+<field name="model_id" ref="model_model_name"/>
+<field name="interval_number">1</field>
+<field name="interval_type">minutes</field>
+<field name="numbercall">-1</field>
+<field name="state">code</field>
+<field name="code"></field>
+</record>
+endsnippet
+snippet record
+<record id="record_name" model="model_name">
+<field name="field_name">field_value</field>
+</record>
+endsnippet
+snippet function
+<function model="model.name" name="method_name" eval="[ref('record_id')]">
+</function>
+endsnippet
+snippet template
+<template id="template_id" name="template_name">
+$0
+</template>
+endsnippet
+snippet templateInherit
+<template id="template_id" name="template_name" inherit_id="module_name.template_id">
+<xpath expr="" position="inside">
+$0
+</xpath>
+</template>
+endsnippet
+snippet xpath
+<xpath expr="$1" position="inside">
+$0
+</xpath>
+endsnippet
+snippet xpathAttr
+<xpath expr="$1" position="attributes">
+<attribute name="attribute">attribute_value</attribute>
+</xpath>
+endsnippet
+snippet attribute
+<attribute name="${1:attribute}">$1_value</attribute>
+endsnippet
+snippet script
+<script type="text/javascript" src="/${1:module_name}/static/src/js/${2:filename}.js"/>
+endsnippet
+snippet link
+<link rel="stylesheet" type="text/scss" href="/${1:module_name}/static/src/scss/${2:filename}.scss"/>
+endsnippet
+snippet assetsBackend
+<template id="assets_backend" name="Backend Assets" inherit_id="web.assets_backend">
+<xpath expr="." position="inside">
+<script type="text/javascript" src="/module_name/static/src/js/module_name.js"/>
+<link rel="stylesheet" type="text/scss" href="/module_name/static/src/scss/module_name.scss"/>
+</xpath>
+</template>
+endsnippet
+snippet assetsFrontend
+<template id="assets_frontend" name="Frontend Assets" inherit_id="website.assets_frontend">
+<xpath expr="." position="inside">
+<script type="text/javascript" src="/module_name/static/src/js/module_name.js"/>
+<link rel="stylesheet" type="text/scss" href="/module_name/static/src/scss/module_name.scss"/>
+</xpath>
+</template>
+endsnippet
+
+# Qweb
+
+snippet t-if
+<t t-if="condition">
+$0
+</t>
+endsnippet
+snippet t-if-else
+<t t-if="condition">
+$0
+</t>
+<t t-elif="condition">
+</t>
+<t t-else="">
+</t>
+endsnippet
+snippet t-foreach
+<t t-foreach="${1:iteration}" t-as="${2:variable}">
+$0
+</t>
+endsnippet
+snippet t-set
+<t t-set="${1:variable}" t-value="${2:value}"/>
+endsnippet
+snippet t-att
+t-att-attribute_name="value"
+endsnippet
+snippet t-attf
+t-att-attribute_name="value">
+endsnippet
+snippet t-esc
+<t t-esc="${1:expression}"/>
+endsnippet
+snippet t-raw
+<t t-raw="${1:variable}"/>
+endsnippet
+snippet t-call
+<t t-call="${1:template_name}"/>
+endsnippet
+snippet t-debug
+<t t-debug"${1:pdb}"/>
+endsnippet
+snippet t-log
+<t t-log="${1:expression}"/>
+endsnippet

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#echo `< /dev/urandom tr -dc [:upper:] | head -c8`
+#echo `< /dev/urandom tr -dc [:digit:] | head -c8`
+for i in `seq 1 100000`;
+do
+    echo `< /dev/urandom tr -dc [:digit:] | head -c8`
+done

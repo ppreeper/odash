@@ -1,0 +1,9 @@
+*:*:{{ PGPOOL_USERNAME }}:{{ PGPOOL_PASSWORD }}
+*:*:{{ POSTGRES_USERNAME }}:{{ POSTGRES_PASSWORD }}
+{% for host in groups ['all'] %}
+{{ hostvars[host]['ansible_fqdn'] }}:{{PGPOOL_PCP_PORT}}:{{ PGPOOL_USERNAME }}:{{ PGPOOL_PASSWORD }}
+{% endfor %}
+{% for host in groups ['all'] %}
+{{ hostvars[host]['ansible_default_ipv4']['address'] }}:{{PGPOOL_PCP_PORT}}:{{ PGPOOL_USERNAME }}:{{ PGPOOL_PASSWORD }}
+{% endfor %}
+{{PGPOOL_VIP}}:{{PGPOOL_PCP_PORT}}:{{ PGPOOL_USERNAME }}:{{ PGPOOL_PASSWORD }}

@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import subprocess
+import argparse
+
+RIPDIR = '/var/data/dvd/rip'
+VOBDIR = '/var/data/dvd/vob'
+ENCDIR = '/var/data/dvd/enc'
+
+
+def vidlength(disc, title):
+    cmd = "ffprobe -i " + VOBDIR + "/" + disc + "." + title + ".vob " + \
+        "-show_format"
+    print(cmd)
+    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+    output, errs = p.communicate(timeout=120)
+    outs = output.decode("utf-8")
+    outlines = outs.splitlines()
+    for l in outlines:
+        print(l)
+    return
+
+
+def cropdetect(disc, title):
+    crop = ""
+    block = 8
+    # vidlength(disc, title)
+    cmd = "ffmpeg -i " + VOBDIR + "/" + disc + "." + title + \
+        ".vob -t 1200 -vf cropdetect -f null - 2>&1 | awk '/crop/ { print $NF }'"
+    print(cmd)
+    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+    output, errs = p.communicate(timeout=120)
+    outs = output.decode("utf-8")
+    outlines = outs.splitlines()
+    linecount = 0
+    cv_w = []
+    cv_h = []
+    out_w = 0
+    out_h = 0
+    x = 0
+    y = 0
+    for l in outlines:
+        crop_split = l.split("=")
+        # print(crop_split)
+        crop_vals = crop_split[1].split(":")
+        ow = int(crop_vals[0])
+        oh = int(crop_vals[1])
+        xx = int(crop_vals[2])
+        yy = int(crop_vals[3])
+        if ow > out_w:
+            out_w = ow
+            cv_w.append(ow)
+        if oh > out_h:
+            out_h = oh
+            cv_h.append(oh)
+        if xx < out_h / 20:
+            x = xx
+        if yy < out_w / 2:
+            y = yy
+        print(ow, oh, xx, yy, out_w, out_h, x, y)
+        linecount += 1
+    print(out_w, out_h, x, y)
+    print(cv_w, cv_h)
+    return crop
+
+
+def main():
+    parser = argparse.ArgumentParser("cropdetect")
+    parser.add_argument("-d", action="store",
+                        dest="disc", help="disc name")
+    parser.add_argument("-t", action="store",
+                        dest="title", help="title number")
+    parser.add_argument("--debug", action="store_true",
+                        dest="debug", help="debug flag", default=True)
+    args = parser.parse_args()
+
+    if args.debug:
+        print("Debug on")
+    if args.disc:
+        print("disc", args.disc)
+        if args.title:
+            print("title", args.title)
+        else:
+            parser.error("no disc specified")
+    else:
+        parser.error("no disc specified")
+
+    cropdetect(args.disc, args.title)
+
+
+if __name__ == '__main__':
+    main()

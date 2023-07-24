@@ -1,0 +1,50 @@
+#!/bin/sh
+
+case "$#" in
+    *)
+        case "$1" in
+            list | status | ps)
+                docker-compose ps
+                ;;
+            start | up)
+                shift
+                case "$#" in
+                    0)  docker-compose up --build -d 
+                        ;;
+                    1)  docker-compose up --build -d "$1"
+                        ;;
+                esac
+                ;;
+            stop | down)
+                docker-compose down
+                ;;
+            restart)
+                shift
+                case "$#" in
+                    0) docker-compose restart ;;
+                    1) docker-compose restart "$1";;
+                esac
+                ;;
+            pull)
+                docker-compose pull
+                ;;
+            scale)
+                shift
+                docker-compose up --build -d --scale $1=$2 
+                ;;
+            console)
+                docker-compose exec "$2" /bin/sh 
+                ;;
+            hardreset)
+                docker-compose down -v --remove-orphans
+                ;;
+            logs)
+                shift
+                case "$#" in
+                    0) docker-compose logs -f ;;
+                    1) docker-compose logs -f "$1";;
+                esac
+                ;;
+        esac
+        ;;
+esac

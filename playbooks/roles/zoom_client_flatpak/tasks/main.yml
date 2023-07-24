@@ -1,0 +1,5 @@
+---
+- name: Zoom client
+  community.general.flatpak:
+    name: us.zoom.Zoom
+    state: present

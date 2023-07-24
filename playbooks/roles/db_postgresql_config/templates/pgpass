@@ -1,0 +1,23 @@
+{% for host in groups ['all'] %}
+{{ hostvars[host]['ansible_hostname'] }}.{{DOMAIN}}:{{POSTGRES_PORT}}:replication:{{REPL_USERNAME}}:{{REPL_PASSWORD}}
+{% endfor %}
+{% for host in groups ['all'] %}
+{{ hostvars[host]['ansible_default_ipv4']['address'] }}:{{POSTGRES_PORT}}:replication:{{REPL_USERNAME}}:{{REPL_PASSWORD}}
+{% endfor %}
+{{PGPOOL_VIP}}:{{POSTGRES_PORT}}:replication:{{REPL_USERNAME}}:{{REPL_PASSWORD}}
+
+{% for host in groups ['all'] %}
+{{ hostvars[host]['ansible_hostname'] }}.{{DOMAIN}}:{{POSTGRES_PORT}}:postgres:{{PGPOOL_USERNAME}}:{{PGPOOL_PASSWORD}}
+{% endfor %}
+{% for host in groups ['all'] %}
+{{ hostvars[host]['ansible_default_ipv4']['address'] }}:{{POSTGRES_PORT}}:postgres:{{PGPOOL_USERNAME}}:{{PGPOOL_PASSWORD}}
+{% endfor %}
+{{PGPOOL_VIP}}:{{POSTGRES_PORT}}:postgres:{{PGPOOL_USERNAME}}:{{PGPOOL_PASSWORD}}
+
+{% for host in groups ['all'] %}
+{{ hostvars[host]['ansible_hostname'] }}.{{DOMAIN}}:*:*:{{POSTGRES_USERNAME}}:{{POSTGRES_PASSWORD}}
+{% endfor %}
+{% for host in groups ['all'] %}
+{{ hostvars[host]['ansible_default_ipv4']['address'] }}:*:*:{{POSTGRES_USERNAME}}:{{POSTGRES_PASSWORD}}
+{% endfor %}
+{{PGPOOL_VIP}}:*:*:{{POSTGRES_USERNAME}}:{{POSTGRES_PASSWORD}}

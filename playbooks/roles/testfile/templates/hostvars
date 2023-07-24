@@ -1,0 +1,67 @@
+{% for item in hostvars[ansible_fqdn].odoo_groups %}
+{% if (item.name == hostvars[ansible_fqdn].ansible_limit) %}
+[options]
+addons_path = /var/lib/odoo/addons{% if (item.edition == "enterprise") %},/opt/enterprise/odoo/addons{% endif %}{% for item in hostvars[ansible_fqdn].odoo_addons %},{{item}}{% endfor %}
+admin_passwd = {{odoo_admin_password}}
+csv_internal_sep = ;
+data_dir = /opt/data
+db_host = {{odoo_db_host}}
+db_port = {{odoo_db_port}}
+db_user = {{odoo_db_user}}{{item.name}}
+db_password = {{item.name}}{{odoo_db_password}}
+db_maxconn = {{odoo_db_maxconn}}
+db_name = False
+db_sslmode = disable
+db_template = template0
+dbfilter =
+demo = {}
+email_from = False
+geoip_database = /usr/share/GeoIP/GeoLite2-City.mmdb
+http_enable = True
+http_interface =
+http_port = {{odoo_http_port}}
+import_partial =
+limit_memory_soft = 2147483648
+limit_memory_hard = 2684354560
+limit_request = 8192
+limit_time_cpu = 600
+limit_time_real = 1200
+limit_time_real_cron = -1
+list_db = True
+;log_db = False
+;log_db_level = warning
+;log_handler = :INFO
+log_level = info
+;logfile = /var/log/odoo/odoo.log
+syslog = True
+longpolling_port = {{odoo_longpolling_port}}
+max_cron_threads = {{odoo_max_cron_threads}}
+osv_memory_age_limit = False
+osv_memory_count_limit = False
+pg_path =
+pidfile =
+proxy = True
+proxy_mode = True
+reportgz = False
+screencasts =
+screenshots = /tmp/odoo_tests
+server_wide_modules = base,auth_ldap,web
+smtp_password = False
+smtp_port = 25
+smtp_server = localhost
+smtp_ssl = False
+smtp_user = False
+test_enable = False
+test_file =
+test_tags = None
+transient_age_limit = 1.0
+translate_modules = ['all']
+unaccent = False
+upgrade_path =
+without_demo = all
+workers = {{odoo_workers}}
+xmlrpcs = True
+xmlrpcs_interface =
+xmlrpcs_port = {{odoo_xmlrpcs_port}}
+{% endif %}
+{% endfor %}

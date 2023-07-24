@@ -1,0 +1,33 @@
+---
+- name: Deploy cloud-init VM
+  hosts: proxmox
+  tasks:
+    - name: Clone cloud-init to VM
+      community.general.proxmox_kvm:
+        api_user: "{{ proxmox_api_user }}"
+        api_password: "{{ proxmox_api_password }}"
+        api_host: "{{ proxmox_api_host }}"
+        node: "{{ proxmox_node }}"
+        clone: ubuntu-jammy-data
+        name: "{{ item.value.name }}"
+        newid: "{{ item.value.vmid }}"
+        storage: nvzfs
+        timeout: 90
+      with_items:
+        - "{{ lookup('ansible.builtin.dict', odoofs) }}"
+    - name: Update VMs
+      community.general.proxmox_kvm:
+        api_user: "{{ proxmox_api_user }}"
+        api_password: "{{ proxmox_api_password }}"
+        api_host: "{{ proxmox_api_host }}"
+        node: "{{ proxmox_node }}"
+        name: "{{ item.value.name }}"
+        vmid: "{{ item.value.vmid }}"
+        onboot: true
+        cpu: x86-64-v3
+        cores: "{{ item.value.cores }}"
+        vcpus: "{{ item.value.cores }}"
+        memory: "{{ item.value.memory }}"
+        update: true
+      with_items:
+        - "{{ lookup('ansible.builtin.dict', odoofs) }}"

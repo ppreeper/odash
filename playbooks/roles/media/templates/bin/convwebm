@@ -1,0 +1,4 @@
+#!/bin/bash
+find . -type f -name "*mkv" -exec vid2webm "{}" \;
+find . -type f -name "*mkv.webm" -exec rename "s/mkv.webm/webm/" "{}" \;
+find . -type f -name "*mkv" -exec rm "{}" \;

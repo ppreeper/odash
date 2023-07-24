@@ -1,0 +1,12 @@
+---
+- name: Sshd PubkeyAuthentication yes
+  ansible.builtin.replace:
+    path: /etc/ssh/sshd_config
+    regexp: "^#PubkeyAuthentication.*$"
+    replace: "PubkeyAuthentication yes"
+- name: Restart ssh
+  ansible.builtin.systemd:
+    name: ssh
+    enabled: true
+    daemon_reload: true
+    state: restarted

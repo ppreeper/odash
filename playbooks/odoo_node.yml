@@ -1,0 +1,15 @@
+---
+- hosts: odoo
+  name: Odoo Node
+  roles:
+    - nsswitch
+    - sysctl_custom
+    - baseline
+    - nfs_common
+    - lang_python
+    - lang_nodejs
+    - db_postgresql_client
+    - wkhtmltopdf
+    - odoo_base_packages
+    - update
+    - reboot

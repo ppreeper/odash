@@ -1,0 +1,25 @@
+---
+- name: Odoo user
+  ansible.builtin.import_role:
+    name: "odoo/user"
+- name: Addons directory
+  ansible.builtin.file:
+    path: "{{ addonsdir }}"
+    state: directory
+    group: "{{ user }}"
+    owner: "{{ user }}"
+    mode: "0775"
+- name: Config directory
+  ansible.builtin.file:
+    path: /etc/odoo
+    state: directory
+    group: "{{ user }}"
+    owner: "{{ user }}"
+    mode: "0775"
+- name: Copy odoo config
+  ansible.builtin.template:
+    src: odoo.conf
+    dest: /etc/odoo/odoo.conf
+    group: "{{ user }}"
+    owner: "{{ user }}"
+    mode: "0664"

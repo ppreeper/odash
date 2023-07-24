@@ -1,0 +1,22 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+platforms:
+  - name: sysctl_custom_u1804
+    image: ubuntu:18.04
+  - name: sysctl_custom_u2004
+    image: ubuntu:20.04
+  - name: sysctl_custom_d9
+    image: debian:9
+  - name: sysctl_custom_d10
+    image: debian:10
+provisioner:
+  name: ansible
+verifier:
+  name: ansible

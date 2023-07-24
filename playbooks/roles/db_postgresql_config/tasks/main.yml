@@ -1,0 +1,29 @@
+---
+- name: PostgreSQL config
+  ansible.builtin.template:
+    src: db.conf
+    dest: /etc/postgresql/{{ POSTGRES_VERSION }}/{{ POSTGRES_CLUSTER }}/conf.d/db.conf
+    owner: postgres
+    group: postgres
+    mode: "0644"
+- name: PostgreSQL pg_hba.conf
+  ansible.builtin.template:
+    src: pg_hba.conf
+    dest: /etc/postgresql/{{ POSTGRES_VERSION }}/{{ POSTGRES_CLUSTER }}/pg_hba.conf
+    owner: postgres
+    group: postgres
+    mode: "0644"
+- name: PostgreSQL pgpass
+  ansible.builtin.template:
+    src: pgpass
+    dest: /var/lib/postgresql/.pgpass
+    owner: postgres
+    group: postgres
+    mode: "0600"
+- name: Sudo for postgres
+  ansible.builtin.template:
+    src: postgres
+    dest: /etc/sudoers.d/postgres
+    owner: root
+    group: root
+    mode: "0440"

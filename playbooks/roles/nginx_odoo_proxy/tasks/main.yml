@@ -1,0 +1,17 @@
+---
+- name: Remove default
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+- name: Odoo nginx setup
+  ansible.builtin.template:
+    src: odoo
+    dest: "/etc/nginx/sites-available/odoo{{ item.name }}"
+    mode: "0644"
+  with_items: "{{ odoo_groups }}"
+- name: Odoo nginx setup link
+  ansible.builtin.file:
+    src: "/etc/nginx/sites-available/odoo{{ item.name }}"
+    dest: "/etc/nginx/sites-enabled/odoo{{ item.name }}"
+    state: link
+  with_items: "{{ odoo_groups }}"

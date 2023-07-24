@@ -1,0 +1,31 @@
+#!/bin/bash
+FILE="${1}"
+IMG="$(echo ${FILE%.*})"
+EXT="$(echo ${FILE##*.})"
+#echo $DOC $EXT
+
+case ${EXT} in
+    "jpeg")
+        jpegoptim -p -P -f --stdout ${IMG}.${EXT} > ${IMG}.min.${EXT} ;;
+    "JPEG")
+        jpegoptim -p -P -f --stdout ${IMG}.${EXT} > ${IMG}.min.${EXT} ;;
+    "jpg")
+        jpegoptim -p -P -f --stdout ${IMG}.${EXT} > ${IMG}.min.${EXT} ;;
+    "JPEG")
+        jpegoptim -p -P -f --stdout ${IMG}.${EXT} > ${IMG}.min.${EXT} ;;
+    "png")
+        pngquant -f --output ${IMG}.min.${EXT} -- ${IMG}.${EXT} ;;
+    "PNG")
+        pngquant -f --output ${IMG}.min.${EXT} -- ${IMG}.${EXT} ;;
+    "gif")
+        gifsicle -O3 -o ${IMG}.min.${EXT} ${IMG}.${EXT} ;;
+    "GIF")
+        gifsicle -O3 -o ${IMG}.min.${EXT} ${IMG}.${EXT} ;;
+    "svg")
+        svgo -i ${IMG}.${EXT} -o ${IMG}.min.${EXT} ;;
+    "SVG")
+        svgo -i ${IMG}.${EXT} -o ${IMG}.min.${EXT} ;;
+    *)
+        echo "";;
+esac
+

@@ -1,0 +1,9 @@
+cat << _EOF_ | tee regcred.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+ name: regcred
+data:
+ .dockerconfigjson: $(cat ${HOME}/.docker/config.json | base64 -w 0)
+type: kubernetes.io/dockerconfigjson
+_EOF_

@@ -1,0 +1,7 @@
+---
+- name: Mysql client
+  ansible.builtin.apt:
+    name:
+      - mysql-client
+    state: present
+  when: ansible_os_family == 'Debian'

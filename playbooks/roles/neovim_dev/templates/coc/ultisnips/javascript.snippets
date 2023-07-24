@@ -1,0 +1,113 @@
+snippet oodefine
+odoo.define('${1:module_name}', function (require) {
+"use strict";
+
+$0
+
+});
+endsnippet
+snippet oowidget
+var ${1:MyWidget} = Widget.extend({
+    template: 'MyQWebTemplate',
+    events: {
+        
+    },
+    /**
+     * @override
+     */
+    init: function (parent) {
+        this._super.apply(this, arguments);
+    },
+    /**
+     * @override
+     */
+    willStart: function () {
+        return this._super.apply(this, arguments);
+    },
+    /**
+     * @override
+     */
+    start: function () {
+        return this._super.apply(this, arguments);
+    },
+});
+endsnippet
+snippet oosuper
+this._super.apply(this, arguments);
+endsnippet
+snippet oorpc
+return this._rpc({
+    model: '${1:model_name}',
+    method: '${2:method_name}',
+    args: []
+    context: {}
+}).then(function (result) {
+    $0
+});
+endsnippet
+snippet oorpc_route
+return this._rpc({
+    route: '${1:url}',
+    params: {
+        ${2:params}
+    }
+}).then(function (result) {
+	$0
+});
+endsnippet
+snippet oodialog
+var MyDialog = Dialog.extend({
+    template: '${1:My.Dialog}',
+    /**
+     * @override
+     */
+    init: function (parent) {
+        this._super(parent, {
+            title: _t("${2:title}"),
+            size: '${3:large}',
+            buttons: [{
+                text: _t("Save"),
+                close: true,
+                classes: 'btn-primary',
+                click: function () {
+                    $0
+                }
+            }, {
+                text: _t("Discard"),
+                close: true,
+            }],
+        });
+    },
+    /**
+     * @override
+     */
+    willStart: function () {
+        return this._super.apply(this, arguments);
+    },
+    /**
+     * @override
+     */
+    start: function () {
+        return this._super.apply(this, arguments);
+    },
+});
+endsnippet
+snippet ooalert
+Dialog.alert(this, _t("${1:message}"), {
+    ${2:title}: _t("$2"),
+    confirm_callback: function () {
+        $0
+    },
+});
+endsnippet
+snippet ooconfirm
+Dialog.confirm(this, _t("${1:message}"), {
+    ${2:title}: _t("$2"),
+    confirm_callback: function () {
+        $0
+    },
+    cancel_callback: function () {
+        
+    },
+});
+endsnippet

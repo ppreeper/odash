@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import os, base64, re, random
+
+def grabpool(pool,plen,randlimit):
+    poolstring=""
+    start=random.randrange(randlimit)
+    #if start+plen > len(pool):
+        #start=random.randrange(1000)
+    end=start+plen
+    print("start: %s\tend:%s"%(start,end))
+    for x in range(start,end):
+        poolstring+=pool[x]
+    return poolstring
+def main():
+    prefix="fd"
+    #globalid=`openssl rand -base64 1000 | tr "[:upper:]" "[:lower:]" | tr -cd "[:xdigit:]" | tr -d "lo" | cut -c 10-19`
+    #subnetid=`openssl rand -base64 1000 | tr "[:upper:]" "[:lower:]" | tr -cd "[:xdigit:]" | tr -d "lo" | cut -c 21-24`
+    #combined=$prefix$globalid$subnetid
+    h = re.compile('[a-f0-9]')
+    pool = h.findall(str(base64.b64encode(os.urandom(4096))).lower())
+    print(len(pool))
+    #print(pool)
+    globalid=grabpool(pool,10,len(pool))
+    subnetid=grabpool(pool,4,len(pool))
+    combined=prefix+globalid+subnetid
+    print("   Prefix: %s" % (prefix))
+    print(" GlobalID: %s" % (globalid))
+    print(" SubnetID: %s" % (subnetid))
+    print(" Combined: %s:%s:%s:%s::/64" % (combined[0:4],combined[4:8],combined[8:12],combined[12:16]))
+    print("IPv6 Addr: %s:%s:%s:%s:xxxx:xxxx:xxxx:xxxx" % (combined[0:4],combined[4:8],combined[8:12],combined[12:16]))
+    return
+
+if __name__=='__main__':
+    main()

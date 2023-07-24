@@ -1,0 +1,5 @@
+---
+- name: DBeaver DB manager
+  community.general.flatpak:
+    name: io.dbeaver.DBeaverCommunity
+    state: present

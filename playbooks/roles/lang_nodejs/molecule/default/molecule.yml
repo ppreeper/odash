@@ -1,0 +1,18 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: lang_javascript_u1804
+    image: ubuntu:18.04
+  - name: lang_javascript_u2004
+    image: ubuntu:20.04
+  - name: lang_javascript_d9
+    image: debian:9
+  - name: lang_javascript_d10
+    image: debian:10
+provisioner:
+  name: ansible
+verifier:
+  name: ansible

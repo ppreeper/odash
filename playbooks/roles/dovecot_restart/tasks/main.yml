@@ -1,0 +1,9 @@
+---
+- name: Dovecot service stop
+  ansible.builtin.systemd:
+    name: dovecot.service
+    state: stopped
+- name: Dovecot service start
+  ansible.builtin.systemd:
+    name: dovecot.service
+    state: started

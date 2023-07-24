@@ -1,0 +1,20 @@
+---
+- name: Rspamd
+  ansible.builtin.apt:
+    name:
+      - rspamd
+    state: present
+- name: Rspamd config
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    owner: root
+    group: root
+  with_items:
+    - { src: "local.d/rspamd.conf", dest: "/etc/rspamd/local.d/", mode: "0644" }
+    - { src: "local.d/options.inc", dest: "/etc/rspamd/local.d/", mode: "0644" }
+    - { src: "local.d/worker-controller.inc", dest: "/etc/rspamd/local.d/", mode: "0644" }
+    - { src: "local.d/classifier-bayed.conf", dest: "/etc/rspamd/local.d/", mode: "0644" }
+    - { src: "local.d/dmarc.conf", dest: "/etc/rspamd/local.d/", mode: "0644" }
+    - { src: "local.d/redis.conf", dest: "/etc/rspamd/local.d/", mode: "0644" }

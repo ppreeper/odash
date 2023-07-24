@@ -1,0 +1,69 @@
+---
+- name: Install etcd package
+  ansible.builtin.package:
+    name: etcd-server
+    state: present
+  when: ((ansible_distribution_release != "stretch") and (ansible_distribution_release != "xenial"))
+
+- name: Set member name
+  ansible.builtin.lineinfile:
+    dest: "/etc/default/etcd"
+    line: 'ETCD_NAME="{{ ansible_hostname }}"'
+    regexp: ".*ETCD_NAME.*"
+  tags:
+    - config
+
+- name: Set data directory
+  ansible.builtin.lineinfile:
+    dest: "/etc/default/etcd"
+    line: 'ETCD_DATA_DIR="/var/lib/etcd/patroni"'
+    regexp: ".*ETCD_DATA_DIR.*"
+  tags:
+    - config
+
+- name: Listen for other cluster peers
+  ansible.builtin.lineinfile:
+    dest: "/etc/default/etcd"
+    line: 'ETCD_LISTEN_PEER_URLS="http://{{ ansible_default_ipv4.address }}:2380"'
+    regexp: ".*ETCD_LISTEN_PEER_URLS.*"
+  tags:
+    - config
+
+- name: Setup advertised peer communication URL
+  ansible.builtin.lineinfile:
+    dest: "/etc/default/etcd"
+    line: 'ETCD_INITIAL_ADVERTISE_PEER_URLS="http://{{ ansible_default_ipv4.address }}:2380"'
+    regexp: ".*ETCD_INITIAL_ADVERTISE_PEER_URLS.*"
+  tags:
+    - config
+
+- name: Enable client listen interface
+  ansible.builtin.lineinfile:
+    dest: "/etc/default/etcd"
+    line: 'ETCD_LISTEN_CLIENT_URLS="http://localhost:2379,http://{{ ansible_default_ipv4.address }}:2379"'
+    regexp: ".*ETCD_LISTEN_CLIENT_URLS.*"
+  tags:
+    - config
+
+- name: Advertise client interface
+  ansible.builtin.lineinfile:
+    dest: "/etc/default/etcd"
+    line: 'ETCD_ADVERTISE_CLIENT_URLS="{% for host in groups[''all''] %}http://{{ hostvars[host][''ansible_default_ipv4''][''address''] }}:2379{% if not loop.last %},{% endif %}{% endfor %}"'
+    regexp: ".*ETCD_ADVERTISE_CLIENT_URLS.*"
+  tags:
+    - config
+
+- name: Setup URLs of initials members
+  ansible.builtin.lineinfile:
+    dest: "/etc/default/etcd"
+    line: 'ETCD_INITIAL_CLUSTER="{% for host in groups[''all''] %}{{ hostvars[host][''name''] }}=http://{{ hostvars[host][''ansible_default_ipv4''][''address''] }}:2380{% if not loop.last %},{% endif %}{% endfor %}"'
+    regexp: ".*ETCD_INITIAL_CLUSTER.*"
+  tags:
+    - config
+
+- name: Systemctl daemon-reload / start etcd
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: etcd
+    state: restarted
+    enabled: true

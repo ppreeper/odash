@@ -1,0 +1,36 @@
+#!/bin/bash
+T="a"
+if [ "${2}" != "" ]; then
+    T="${2}"
+fi
+digger(){
+    #echo dig +nocmd +noall +answer +ttlid @${2} ${4} ${3}
+    echo ${1} `dig +nocmd +noall +answer +ttlid @${2} ${4} ${3}`
+}
+for ns in `grep nameserver /etc/resolv.conf | awk '{print $2}'`
+do
+    digger localhost $ns $1
+done
+digger ns1.arthomson.com 10.0.100.15 ${1} ${T}
+digger ns2.arthomson.com 10.0.103.15 ${1} ${T}
+digger ktk1.smartt.com 69.31.170.249 ${1} ${T}
+digger ktk2.smartt.com 69.67.179.249 ${1} ${T}
+digger ns1.smartt.com 69.31.170.53 ${1} ${T}
+digger ns2.smartt.com 69.67.179.249 ${1} ${T}
+digger ns1.name.com 162.88.61.47 ${1} ${T}
+digger ns2.name.com 162.88.60.47 ${1} ${T}
+digger ns3.name.com 162.88.61.49 ${1} ${T}
+digger ns4.name.com 162.88.60.49 ${1} ${T}
+digger ns1.digitalocean.com ns1.digitalocean.com ${1} ${T}
+digger ns2.digitalocean.com ns2.digitalocean.com ${1} ${T}
+digger ns3.digitalocean.com ns3.digitalocean.com ${1} ${T}
+digger 222.222.opendns.com 208.67.222.222 ${1} ${T}
+digger 220.220.opendns.com 208.67.220.220 ${1} ${T}
+digger 222.220.opendns.com 208.67.222.220 ${1} ${T}
+digger 220.222.opendns.com 208.67.220.222 ${1} ${T}
+digger 8.8.8.8.google.com  8.8.8.8 ${1} ${T}
+digger 8.8.4.4.google.com  8.8.4.4 ${1} ${T}
+digger 9.9.9.9.quad9.ibm   9.9.9.9 ${1} ${T}
+digger 1.1.1.1.cloudflare  1.1.1.1 ${1} ${T}
+digger 1.0.0.1.cloudflare  1.0.0.1 ${1} ${T}
+

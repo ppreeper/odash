@@ -1,0 +1,5 @@
+---
+- name: Libreoffice
+  community.general.flatpak:
+    name: org.libreoffice.LibreOffice
+    state: present

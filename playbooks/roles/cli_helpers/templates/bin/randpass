@@ -1,0 +1,4 @@
+#!/bin/bash
+< /dev/urandom tr -dc '_;#@%&A-Z-a-z-0-9' | head -c16;echo;
+dd if=/dev/urandom bs=2048 count=1 2>/dev/null | sha512sum | head -c 32; echo;
+openssl rand -base64 1000 | tr "[:upper:]" "[:lower:]" | tr -cd "[:alnum:]" | tr -d "lo" | cut -c 10-19

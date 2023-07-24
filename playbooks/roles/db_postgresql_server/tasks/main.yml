@@ -1,0 +1,10 @@
+---
+- name: PostgreSQL repo
+  ansible.builtin.import_role:
+    name: db_postgresql_repo
+- name: PostgreSQL server
+  ansible.builtin.apt:
+    name:
+      - "postgresql-{{ POSTGRES_VERSION }}"
+    state: present
+  when: ansible_os_family == 'Debian'

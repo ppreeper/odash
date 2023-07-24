@@ -1,0 +1,20 @@
+---
+- name: Create group {{ user }}
+  ansible.builtin.group:
+    name: "{{ user }}"
+    state: present
+- name: Create user {{ user }}
+  ansible.builtin.user:
+    name: "{{ user }}"
+    groups:
+      - "{{ user }}"
+      - sudo
+    home: "{{ home }}"
+    shell: /bin/bash
+    state: present
+- name: Change ownership
+  ansible.builtin.file:
+    path: "{{ home }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    recurse: true

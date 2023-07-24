@@ -1,0 +1,7 @@
+---
+- name: Terminator terminal emulator
+  ansible.builtin.apt:
+    name:
+      - terminator
+    state: present
+  when: ansible_os_family == 'Debian'

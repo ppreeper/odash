@@ -1,0 +1,6 @@
+#!/bin/bash
+echo $1 $2
+MEDIA='/var/data/dvd'
+DISC=${1}
+TITLE=${2}
+mpv -dvd-device "${MEDIA}/iso/${DISC}.iso" "dvd://${TITLE}" --stream-dump="${MEDIA}/vob/${DISC}.${TITLE}.vob"

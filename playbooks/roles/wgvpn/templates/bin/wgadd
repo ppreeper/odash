@@ -1,0 +1,4 @@
+#!/bin/sh
+CDIR="$HOME/.config/wgvpn"
+CONF="$1"
+sudo nmcli connection import type wireguard file "$CDIR/$CONF.conf"

@@ -1,0 +1,34 @@
+#!/bin/bash
+vendor=`cat /proc/cpuinfo | grep ^vendor_id | uniq | awk -F: '{print $2}'`
+echo -e "vendor_id:\t"${vendor}
+model_name=`cat /proc/cpuinfo | grep "^model name" | uniq`
+echo -e "model name:\t"${model_name}
+cpu_count=`cat /proc/cpuinfo | grep "^model name" | wc -l`
+echo -e "CPU Threads:\t"${cpu_count}
+cat /proc/cpuinfo | grep "^cpu MHz" | xargs -I {} echo -e "{}"
+bogomips=`cat /proc/cpuinfo | grep "^bogo" | uniq | awk -F: '{print $2}'|tr -d '[:space:]'`
+echo -e "bogomips:\t"${bogomips}
+lm64=`cat /proc/cpuinfo | grep ^flags | grep lm`
+lm64len=`expr "${lm64}" : ".*"`
+if [ ${lm64len} -eq 0 ]; then
+    echo -e "Architecture:\tx86"
+else
+    echo -e "Architecture:\tx86_64"
+fi
+vmx=`cat /proc/cpuinfo | grep ^flags | grep vmx`
+vmxlen=`expr "${vmx}" : ".*"`
+if [ ${vmxlen} -ne 0 ]; then
+    echo -e "Virtualization:\tVT-x"
+fi
+svm=`cat /proc/cpuinfo | grep ^flags | grep svm`
+svmlen=`expr "${svm}" : ".*"`
+if [ ${svmlen} -ne 0 ]; then
+    echo -e "Virtualization:\tSVM"
+fi
+aes=`cat /proc/cpuinfo | grep ^flags | grep aes`
+aeslen=`expr "${aes}" : ".*"`
+if [ ${aeslen} -eq 0 ]; then
+    echo -e "AES/AES-NI:\tfalse"
+else
+    echo -e "AES/AES-NI:\ttrue"
+fi

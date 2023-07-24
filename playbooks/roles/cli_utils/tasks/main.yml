@@ -1,0 +1,48 @@
+---
+- name: CLI downloaders
+  ansible.builtin.apt:
+    name:
+      - wget
+      - curl
+      - aria2
+      - netcat
+      - pv
+    state: present
+- name: CLI file utils
+  ansible.builtin.apt:
+    name:
+      - gddrescue
+    state: present
+- name: CLI compression
+  ansible.builtin.apt:
+    name:
+      - lzop
+      - pigz
+      - cabextract
+      - upx-ucl
+    state: present
+- name: CLI unrar ubuntu
+  ansible.builtin.apt:
+    name:
+      - unrar
+    state: present
+  when: ansible_distribution == "Ubuntu"
+- name: CLI unrar debian
+  ansible.builtin.apt:
+    name:
+      - unrar-free
+    state: present
+  when: ansible_distribution == "Debian"
+- name: CLI mail utils
+  ansible.builtin.apt:
+    name:
+      - swaks
+    state: present
+- name: CLI monitoring
+  ansible.builtin.apt:
+    name:
+      - htop
+      - nmon
+      - tmux
+      - screenfetch
+    state: present

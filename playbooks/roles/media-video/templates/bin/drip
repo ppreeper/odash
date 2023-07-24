@@ -1,0 +1,190 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import subprocess
+import argparse
+
+RIPDIR = '/var/data/dvd/rip'
+VOBDIR = '/var/data/dvd/vob'
+ENCDIR = '/var/data/dvd/enc'
+DRIVE = '/dev/sr0'
+DEBUG = False
+ACHAN = 0
+
+
+def runcmd(cmd):
+    if DEBUG:
+        print(cmd)
+    else:
+        print(cmd)
+        p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+    output, errs = p.communicate(timeout=3600)
+    outs = output.decode("utf-8")
+    outlines = outs.splitlines()
+    return outlines
+
+
+def cropdetect(disc, title):
+    crop_val = ""
+    # block = 8
+    cmd = "ffmpeg -i " + VOBDIR + "/" + disc + "." + title + \
+        ".vob -t 300 -vf cropdetect -f null - 2>&1 " + \
+        "| awk '/crop/ { print $NF }'"
+    outlines = runcmd(cmd)
+    linecount = 0
+    out_w = 0
+    out_h = 0
+    x = 0
+    y = 0
+    for l in outlines:
+        crop_split = l.split("=")
+        # print(crop_split)
+        crop_vals = crop_split[1].split(":")
+        ow = int(crop_vals[0])
+        oh = int(crop_vals[1])
+        xx = int(crop_vals[2])
+        yy = int(crop_vals[3])
+        if ow > out_w:
+            out_w = ow
+        if oh > out_h:
+            out_h = oh
+        if xx < out_h / 20:
+            x = xx
+        if yy < out_w / 2:
+            y = yy
+        linecount += 1
+    crop_val = "crop=" + str(out_w) + ":" + str(out_h) + \
+        ":" + str(x) + ":" + str(y)
+    return crop_val
+
+
+def dvd2rip(disc):
+    cmd = "vobcopy -i " + DRIVE + " -o " + RIPDIR + " -M -t " + disc
+    runcmd(cmd)
+    return
+
+
+def dvd2vob(disc, title):
+    cmd = "mpv " + DRIVE + " --title=" + title + " --stream-dump=" + \
+        VOBDIR + "/" + disc + "." + title + ".vob"
+    runcmd(cmd)
+    return
+
+
+def rip2vob(disc, title, ripall):
+    if ripall:
+        for i in range(1, 100):
+            cmd = "rm -f " + VOBDIR + "/" + disc + "." + str(i) + ".vob"
+            runcmd(cmd)
+            cmd = "mpv " + RIPDIR + "/" + disc + " --title=" + str(i) + \
+                " --stream-dump=" + VOBDIR + "/" + disc + "." + str(i) + ".vob"
+            runcmd(cmd)
+    else:
+        cmd = "rm -f " + VOBDIR + "/" + disc + "." + title + ".vob"
+        runcmd(cmd)
+        cmd = "mpv " + RIPDIR + "/" + disc + " --title=" + title + \
+            " --stream-dump=" + VOBDIR + "/" + disc + "." + title + ".vob"
+        runcmd(cmd)
+    return
+
+
+def vob2mp4(disc, title, ripall, crop):
+    if ripall:
+        for i in range(1, 100):
+            if crop:
+                cropval = cropdetect(disc, str(i))
+                cmd = "ffmpeg -i " + VOBDIR + "/" + disc + "." + str(i) + \
+                    ".vob " + \
+                    "-threads 8 " + \
+                    "-map 0:v -map 0:a:" + str(ACHAN) + " " + \
+                    "-c:v libx264 -q:v -1 " + \
+                    "-vf " + cropval + " " + \
+                    "-c:a aac -ac 2 -q:a 4 -strict -2 -f mp4 -y " + \
+                    ENCDIR + "/" + disc + "." + str(i) + ".mp4"
+                runcmd(cmd)
+            else:
+                cmd = "ffmpeg -i " + VOBDIR + "/" + disc + "." + str(i) + \
+                    ".vob " + \
+                    "-threads 8 " + \
+                    "-map 0:v -map 0:a:" + str(ACHAN) + " " + \
+                    "-c:v libx264 -q:v -1 " + \
+                    "-c:a aac -ac 2 -q:a 4 -strict -2 -f mp4 -y " + \
+                    ENCDIR + "/" + disc + "." + str(i) + ".mp4"
+                runcmd(cmd)
+
+    else:
+        if crop:
+            cropval = cropdetect(disc, title)
+            cmd = "ffmpeg -i " + VOBDIR + "/" + disc + "." + title + \
+                ".vob " + \
+                "-threads 8 " + \
+                "-map 0:v -map 0:a:" + str(ACHAN) + " " + \
+                "-c:v libx264 -q:v -1 " + \
+                "-vf " + cropval + " " + \
+                "-c:a aac -ac 2 -q:a 4 -strict -2 -f mp4 -y " + \
+                ENCDIR + "/" + disc + "." + title + ".mp4"
+            runcmd(cmd)
+        else:
+            cmd = "ffmpeg -i " + VOBDIR + "/" + disc + "." + title + \
+                ".vob " + \
+                "-threads 8 " + \
+                "-map 0:v -map 0:a:" + str(ACHAN) + " " + \
+                "-c:v libx264 -q:v -1 " + \
+                "-c:a aac -ac 2 -q:a 4 -strict -2 -f mp4 -y " + \
+                ENCDIR + "/" + disc + "." + title + ".mp4"
+            runcmd(cmd)
+    return
+
+
+def main():
+    parser = argparse.ArgumentParser("cropdetect")
+    parser.add_argument("-d", action="store",
+                        dest="disc", help="disc name")
+    parser.add_argument("-t", action="store",
+                        dest="title", help="title number")
+    parser.add_argument("-c", action="store_true",
+                        dest="crop", help="crop video", default=False)
+    parser.add_argument("-r", action="store_true",
+                        dest="rip", help="dvd rip", default=False)
+    parser.add_argument("-v", action="store_true",
+                        dest="vob", help="rip vob", default=False)
+    parser.add_argument("-e", action="store_true",
+                        dest="enc", help="encode", default=False)
+    parser.add_argument("-a", action="store_true",
+                        dest="all", help="all titles", default=False)
+    parser.add_argument("--ac", action="store",
+                        dest="ac", help="audio channel", default=0)
+    parser.add_argument("--debug", action="store_true",
+                        dest="debug", help="debug flag", default=True)
+    args = parser.parse_args()
+
+    if args.debug:
+        DEBUG = True
+
+    if args.ac:
+        ACHAN = args.ac
+
+    if args.disc:
+        if args.title:
+            print("title", args.title)
+        else:
+            parser.error("no disc specified")
+    else:
+        parser.error("no disc specified")
+
+    if args.rip:
+        dvd2rip(args.disc)
+    if args.vob:
+        if args.all:
+            rip2vob(args.disc, "0", args.all)
+        else:
+            rip2vob(args.disc, args.title, args.all)
+    if args.enc:
+        if args.all:
+            vob2mp4(args.disc, 0, args.all, args.crop)
+        else:
+            vob2mp4(args.disc, args.title, args.all, args.crop)
+
+
+if __name__ == '__main__':
+    main()

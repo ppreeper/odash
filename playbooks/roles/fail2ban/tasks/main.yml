@@ -1,0 +1,6 @@
+---
+- name: Fail2ban
+  ansible.builtin.apt:
+    name:
+      - fail2ban
+    state: present

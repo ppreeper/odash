@@ -1,0 +1,16 @@
+---
+- name: Import role dependencies
+  ansible.builtin.include_role:
+    name: "{{ rolevar }}"
+  loop:
+    - "db/postgresql_repo"
+    - "db/postgresql_server"
+    - "db/postgresql_server_open"
+    - "odoo/user"
+- name: Update odoo db role
+  become_user: postgres
+  community.postgresql.postgresql_user:
+    name: odoo
+    password: odoo
+    state: present
+    role_attr_flags: "CREATEDB"

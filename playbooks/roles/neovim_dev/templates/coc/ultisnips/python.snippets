@@ -1,0 +1,137 @@
+snippet sb
+#!/usr/bin/env python
+endsnippet
+snippet sb3
+#!/usr/bin/env python3
+endsnippet
+snippet ucode
+# -*- coding: utf-8 -*-
+endsnippet
+snippet oomanifest
+{
+    'name': '$1',
+    'version': '1.0',
+    'description': '$2',
+    'summary': '$2',
+    'author': '$3',
+    'website': '',
+    'license': 'LGPL-3',
+    'category': '',
+    'depends': [
+        ''
+    ],
+    'data': [
+        ''
+    ],
+    'demo': [
+        ''
+    ],
+    'auto_install': True,
+    'application': True,
+}
+endsnippet
+snippet ooimport
+# -*- coding: utf-8 -*-
+
+import logging
+
+from odoo import _, api, fields, models
+
+_logger = logging.getLogger(__name__)
+
+$0
+endsnippet
+snippet oofimport
+from . import ${1:names}
+endsnippet
+snippet oomodel
+class ${1:ModuleName}(models.Model):
+	_name = '${2:module.name}'
+	_description = '${3:description}'
+endsnippet
+snippet oofchar
+${1:field_name} = fields.Char(string='$0')
+endsnippet
+snippet ooftext
+${1:field_name} = fields.Text(string='$0')
+endsnippet
+snippet oofhtml
+${1:field_name} = fields.Html(string='$0')
+endsnippet
+snippet oofboolean
+${1:field_name} = fields.Boolean(string='$0')
+endsnippet
+snippet oofinteger
+${1:field_name} = fields.Integer(string='$0')
+endsnippet
+snippet ooffloat
+${1:field_name} = fields.Float(string='$0', digits=(${2:total}, ${3:decimal}))
+endsnippet
+snippet oofselection
+${1:field_name} = fields.Selection([
+	('${2:key}', '${3:value}')
+	], string='$0')
+endsnippet
+snippet oofdate
+${1:field_name} = fields.Date(string='$0')
+endsnippet
+snippet oofdatetime
+${1:field_name} = fields.DateTime(string='$0')
+endsnippet
+snippet oofbinary
+${1:field_name} = fields.Binary(string='$0')
+endsnippet
+snippet oofmonetary
+${1:field_name} = fields.Monetary(string='$0')
+endsnippet
+snippet oofmany2one
+${1:field_name} = fields.Many2one('${2:comodel_name}', string='$0')
+endsnippet
+snippet oofone2many
+${1:field_name} = fields.One2many('${2:comodel_name}', '${3:inverse_field}', string='$0')
+endsnippet
+snippet oofmany2many
+${1:field_name} = fields.Many2many('${2:comodel_name}', string='$0')
+endsnippet
+snippet oofcompute
+${1:field_name} = fields.Char(string='$0')
+${1:field_name} = fields.Char(compute='_compute_$1', string='$2')
+
+@api.depends('$0')
+def _compute_$1(self):
+    pass
+endsnippet
+snippet oofcomputei
+${1:field_name} = fields.Char(compute='_compute_$1', inverse='_inverse_$1', string='')
+
+@api.depends('')
+def _compute_$1(self):
+    pass
+def _inverse_$1(self):
+    pass
+endsnippet
+snippet oofonchange
+@api.onchange('$0')
+def _onchange_(self):
+    pass
+endsnippet
+snippet oofcontrains
+@api.constrains('${1:fieldname}')
+def _constrains_${1:fieldname}(self):
+    pass
+endsnippet
+snippet oocreate
+@api.model
+def create(self, ${1:vals}):
+    return super().create($1)
+endsnippet
+snippet oowrite
+@api.multi
+def write(self, ${1:vals}):
+    return super().write($1)
+endsnippet
+snippet oounlink
+@api.multi
+def unlink(self):
+    return super().unlink()
+endsnippet

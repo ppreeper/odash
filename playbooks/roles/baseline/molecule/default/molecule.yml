@@ -1,0 +1,22 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: podman
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+platforms:
+  - name: instance_baseline_u1804
+    image: ubuntu:18.04
+  - name: instance_baseline_u2004
+    image: ubuntu:20.04
+  - name: instance_baseline_d9
+    image: debian:9
+  - name: instance_baseline_d10
+    image: debian:10
+provisioner:
+  name: ansible
+verifier:
+  name: ansible

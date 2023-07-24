@@ -1,0 +1,6 @@
+#!/bin/sh
+hostname -f
+uname -a
+cat /etc/os-release
+free --mega
+cat /proc/cpuinfo | grep -e "^model name" | sort | uniq

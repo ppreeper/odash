@@ -1,0 +1,19 @@
+---
+- name: Hostname insert
+  vars:
+    adia: "{{ ansible_default_ipv4.address }}"
+    ih: "{{ inventory_hostname }}"
+  ansible.builtin.replace:
+    backup: true
+    path: /etc/hosts
+    regexp: "^(127.0.1.1.*)$"
+    replace: "{{ adia }}    {{ ih }}.{{ domain }} {{ ih }}"
+- name: Hostname insert
+  vars:
+    adia: "{{ ansible_default_ipv4.address }}"
+    ih: "{{ inventory_hostname }}"
+  ansible.builtin.replace:
+    backup: true
+    path: /etc/hosts
+    regexp: "^({{ adia }}.*)$"
+    replace: "{{ adia }}    {{ ih }}.{{ domain }} {{ ih }}"

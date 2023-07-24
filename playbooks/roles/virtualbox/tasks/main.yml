@@ -1,0 +1,8 @@
+---
+- name: Virtualbox
+  ansible.builtin.apt:
+    name:
+      - virtualbox
+      - virtualbox-guest-additions-iso
+    state: present
+  when: ansible_os_family == 'Debian'

@@ -1,0 +1,21 @@
+#!/bin/bash
+FILE="${1}"
+DOC="$(echo ${FILE%.*})"
+RES="$HOME/.local/share/asciidoctor"
+GID=$(id -g)
+
+podman run --rm \
+    -v "${PWD}":"/documents/" \
+    -v "${RES}":"/resources" \
+    docker.io/asciidoctor/docker-asciidoctor asciidoctor-pdf \
+    -a allow-uri-read \
+    -r asciidoctor-diagram \
+    -r asciidoctor-mathematical \
+    -a pdf-fontsdir=/resources/fonts \
+    -a pdf-themesdir=/resources/themes \
+    --theme=basic \
+    "${DOC}.adoc"
+
+podman run --rm \
+    -v "${PWD}:/documents/" \
+    docker.io/alpine:latest chown root:root "/documents/${DOC}.pdf"

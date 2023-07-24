@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "${1}"
+VID="${1}"
+ffmpeg -i "${VID}" -vf "scale=trunc(iw*2)/2:trunc(ih*2)/2" -c:v libvpx-vp9 -q:v -1 -crf 30 -b:v 0 -c:a opus -strict -2 -threads 8 -f webm -y "${VID}.webm"

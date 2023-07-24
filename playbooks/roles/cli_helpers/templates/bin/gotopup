@@ -1,0 +1,59 @@
+#!/bin/bash
+APP=$(which gotop)
+REPO="https://github.com/cjbassi/gotop"
+TAGFILTER="refs/tags"
+
+major=$( git ls-remote --tags ${REPO} | grep ${TAGFILTER} | grep -v -e beta -e rc[123456789] | awk '{print $2}' | sed "s/refs\/tags\///" | awk -F'.' '{print $1}' | sort | uniq | tail -1)
+
+minor=$( git ls-remote --tags ${REPO} | grep ${TAGFILTER} | grep -v -e beta -e rc[123456789] | awk '{print $2}' | sed "s/refs\/tags\///" | grep ^$major | awk -F'.' '{print $2}' | sort -g | uniq | tail -1)
+
+patch=$( git ls-remote --tags ${REPO} | grep ${TAGFILTER} | grep -v -e beta -e rc[123456789] | awk '{print $2}' | sed "s/refs\/tags\///" | grep ^$major.$minor | awk -F'.' '{print $3}' | sort -g | uniq | tail -1)
+
+vers=""
+
+if [ "$patch" = "" ]; then
+    vers=$major.$minor
+else
+    vers=$major.$minor.$patch
+fi
+echo $vers
+
+BDIR=/usr/local/bin
+
+function download(){
+    echo "download $1 version"
+    echo "Installing ${vers}"
+    sudo rm -f /tmp/${vers}.linux-amd64.tgz
+    wget -qc ${REPO}/releases/download/${vers}/gotop_${vers}_linux_amd64.tgz -O /tmp/${vers}.linux-amd64.tgz
+    sudo rm -f ${BDIR}/gotop
+    sudo tar axf /tmp/${vers}.linux-amd64.tgz -C ${BDIR}
+    sudo rm -f /tmp/${vers}.linux-amd64.tgz
+}
+
+function uptodate(){
+    echo "gotop version is current"
+}
+
+if [ "${APP}" == "" ]; then
+    echo "Not Installed"
+    download new
+else
+    APPVER=$(${APP} --version | awk '{print $3}' | sed 's/^go//')
+    APPMAJOR=$(echo $APPVER | awk -F'.' '{print $1}')
+    APPMINOR=$(echo $APPVER | awk -F'.' '{print $2}')
+    APPPATCH=$(echo $APPVER | awk -F'.' '{print $3}')
+    if [ $((${APPMAJOR})) -lt $((${major})) ]; then
+        download major
+    else
+        if [ $((${APPMINOR})) -lt $((${minor})) ]; then
+            download minor
+        else
+            if [ $((${APPPATCH})) -lt $((${patch})) ]; then
+                download patch
+            else
+                #uptodate
+                echo "download"
+            fi
+        fi
+    fi
+fi

@@ -1,0 +1,9 @@
+---
+- name: Pgpool2 service stop
+  ansible.builtin.systemd:
+    name: pgpool2.service
+    state: stopped
+- name: Pgpool2 service start
+  ansible.builtin.systemd:
+    name: pgpool2.service
+    state: started

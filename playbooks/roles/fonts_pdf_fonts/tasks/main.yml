@@ -1,0 +1,23 @@
+---
+- name: Pdf fonts
+  ansible.builtin.get_url:
+    url: "https://github.com/asciidoctor/asciidoctor-pdf/raw/main/data/fonts/{{ item.font }}"
+    dest: "{{ LOCALDIR }}/share/fonts"
+    mode: "0640"
+    owner: "{{ USER }}"
+    group: "{{ USER }}"
+  with_items:
+    - font: mplus1mn-bold-subset.ttf
+    - font: mplus1mn-bold_italic-subset.ttf
+    - font: mplus1mn-italic-subset.ttf
+    - font: mplus1mn-regular-subset.ttf
+    - font: mplus1p-regular-fallback.ttf
+    - font: notoemoji-subset.ttf
+    - font: notosans-bold-subset.ttf
+    - font: notosans-bold_italic-subset.ttf
+    - font: notosans-italic-subset.ttf
+    - font: notosans-regular-subset.ttf
+    - font: notoserif-bold-subset.ttf
+    - font: notoserif-bold_italic-subset.ttf
+    - font: notoserif-italic-subset.ttf
+    - font: notoserif-regular-subset.ttf

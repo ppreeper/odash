@@ -1,0 +1,11 @@
+---
+- name: PostgreSQL open config
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    owner: "postgres"
+    group: "postgres"
+  with_items:
+    - { src: "pg_hba.conf", dest: "/etc/postgresql/{{ POSTGRES_VERSION }}/main/", mode: "0640" }
+    - { src: "postgresql.conf", dest: "/etc/postgresql/{{ POSTGRES_VERSION }}/main/", mode: "0640" }

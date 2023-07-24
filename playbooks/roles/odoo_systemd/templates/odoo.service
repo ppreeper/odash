@@ -1,0 +1,16 @@
+[Unit]
+Description=odoo
+After=network.target
+
+[Service]
+User=odoo
+Group=odoo
+WorkingDirectory={{odoodir}}/odoo
+ExecStart=/usr/bin/python3 {{odoodir}}/odoo/odoo-bin -c /etc/odoo/odoo.conf
+Type=simple
+Restart=always
+RestartSec=10s
+LimitNOFILE=40000
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,24 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+platforms:
+  - name: docker_io_u1804
+    image: ubuntu:18.04
+  - name: docker_io_u2004
+    image: ubuntu:20.04
+  - name: docker_io_d9
+    image: debian:9
+  - name: docker_io_d10
+    image: debian:10
+  - name: docker_io_d11
+    image: debian:11
+provisioner:
+  name: ansible
+verifier:
+  name: ansible

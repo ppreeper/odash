@@ -1,0 +1,6 @@
+---
+- name: Apport
+  ansible.builtin.replace:
+    path: /etc/default/apport
+    regexp: '^enabled=.*$'
+    replace: 'enabled=0'

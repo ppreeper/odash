@@ -1,0 +1,24 @@
+---
+- name: Set ubuntu code name
+  ansible.builtin.set_fact:
+    ubuntu_codename: "{{ lookup('ini', 'UBUNTU_CODENAME type=properties file=' + ansible_distribution_file_path) }}"
+- name: PostgreSQL repo key
+  ansible.builtin.get_url:
+    url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+    dest: /etc/apt/trusted.gpg.d/pgdg.gpg.asc
+    mode: "0644"
+    force: true
+  when: ansible_os_family == 'Debian'
+- name: PostgreSQL repository stat
+  ansible.builtin.stat:
+    path: "/etc/apt/sources.list.d/pgdg.list"
+  register: stat_result
+  when: ansible_os_family == 'Debian'
+- name: PostgreSQL repository add
+  ansible.builtin.apt_repository:
+    validate_certs: false
+    repo: "deb [arch=amd64] http://apt.postgresql.org/pub/repos/apt/ {{ ansible_lsb.codename | lower }}-pgdg main"
+    state: present
+    filename: pgdg
+    update_cache: true
+  when: ansible_os_family == 'Debian'

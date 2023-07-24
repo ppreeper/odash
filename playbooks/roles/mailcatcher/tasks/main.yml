@@ -1,0 +1,28 @@
+---
+- name: Mailcatcher pre-reqs
+  ansible.builtin.apt:
+    name:
+      - build-essential
+      - ruby
+      - ruby-dev
+      - libssl-dev
+      - libsqlite3-dev
+    state: present
+    update_cache: true
+  when: ansible_os_family == 'Debian'
+- name: Mailcatcher
+  community.general.gem:
+    name: mailcatcher
+    state: present
+    user_install: false
+- name: Mailcatcher.service file
+  ansible.builtin.template:
+    src: "mailcatcher.service"
+    dest: "/lib/systemd/system/"
+    mode: "0644"
+- name: Enable mailcatcher.service
+  ansible.builtin.systemd:
+    name: mailcatcher
+    enabled: true
+    daemon_reload: true
+    state: started

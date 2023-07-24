@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "${1}"
+VID="${1}"
+ffmpeg -i "${VID}" -map 0:v -map 0:a:0 -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -c:v libx264 -q:v -1 -threads 8 -c:a aac -q:a 4 -strict -2 -f mp4 -y "${VID}.mp4"

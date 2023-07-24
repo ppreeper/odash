@@ -1,0 +1,12 @@
+---
+- name: Start vm
+  community.general.proxmox_kvm:
+    api_user: "{{ proxmox_api_user }}"
+    api_password: "{{ proxmox_api_password }}"
+    api_host: "{{ proxmox_api_host }}"
+    name: "{{ item.name }}"
+    vmid: "{{ item.vmid }}"
+    state: started
+  with_items:
+    - { name: "cloudy1", vmid: "100" }
+    - { name: "cloudy2", vmid: "101" }

@@ -1,0 +1,43 @@
+---
+- name: Media video tools
+  ansible.builtin.apt:
+    name:
+      - dvdbackup
+      - vobcopy
+    state: present
+  when: ansible_os_family == 'Debian'
+- name: Media cli helpers
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    owner: "{{ USER }}"
+    group: "{{ USER }}"
+  with_items:
+    - { src: "bin/conv.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/convwebm", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/cpy2mp4", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/crop2mp4", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/cropdetect", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/cropvid2mp4", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/cropvob2mp4.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/crp2mp4", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/drip", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/dvd2rip", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/dvd2vob", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/iso2vob", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/mp42mp4", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/rip2vob", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/v2mp4", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/va.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vc.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vhfa.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vhfc.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vhf.sh", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vid2mp4", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vid2srt", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vid2webm", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vidrotate90clock", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vob2mp4", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vpx1pfast", dest: "{{ USERBIN }}", mode: "0755" }
+    - { src: "bin/vr.sh", dest: "{{ USERBIN }}", mode: "0755" }

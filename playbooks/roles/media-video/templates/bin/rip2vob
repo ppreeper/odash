@@ -1,0 +1,5 @@
+#!/bin/bash
+MEDIA='/var/data/dvd'
+DISC=${1}
+TITLE=${2}
+mpv "${MEDIA}/rip/${DISC}" --title="${TITLE}" --stream-dump="${MEDIA}/vob/${DISC}.${TITLE}.vob"

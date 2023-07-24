@@ -1,0 +1,4 @@
+#!/bin/bash
+echo $1
+VID=$1
+ffmpeg -i $VID -map 0:v -map 0:a:0 -c:v copy -c:a copy -f mp4 -y $VID.mp4

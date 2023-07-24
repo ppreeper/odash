@@ -1,0 +1,27 @@
+---
+- name: CLI remote file systems
+  ansible.builtin.apt:
+    name:
+      - rsync
+      - sshfs
+      - nfs-common
+      - samba
+      - cifs-utils
+      - krb5-user
+    state: present
+  when: ansible_os_family == 'Debian'
+
+- name: CLI helpers
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+  with_items:
+    - { src: "smnt", dest: "{{ user_bin }}", mode: "0755" }
+    - { src: "sumnt", dest: "{{ user_bin }}", mode: "0755" }
+    - { src: "nmnt", dest: "{{ user_bin }}", mode: "0755" }
+    - { src: "numnt", dest: "{{ user_bin }}", mode: "0755" }
+    - { src: "smbmnt", dest: "{{ user_bin }}", mode: "0755" }
+    - { src: "smbumnt", dest: "{{ user_bin }}", mode: "0755" }

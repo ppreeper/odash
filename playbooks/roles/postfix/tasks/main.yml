@@ -1,0 +1,7 @@
+---
+- name: Postfix
+  ansible.builtin.apt:
+    name:
+      - postfix
+      - postfix-sqlite
+    state: present

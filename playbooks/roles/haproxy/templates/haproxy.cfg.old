@@ -1,0 +1,27 @@
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    chroot /var/lib/haproxy
+    user haproxy
+    group haproxy
+    daemon
+    maxconn 100
+
+defaults
+    log global
+    mode tcp
+    retries 2
+    timeout client 30m
+    timeout connect 4s
+    timeout server 30m
+    timeout check 5s
+
+frontend ft_postgresql
+    bind *:{{HAPROXY_POSTGRES_PORT}}
+    default_backend bk_db
+
+backend bk_db
+    option httpchk
+{% for host in groups ['all'] %}
+    server postgresql_{{hostvars[host]['ansible_hostname']}} {{hostvars[host]['inventory_hostname']}}:{{PG_PORT}} check port 8008
+{% endfor %}

@@ -1,0 +1,24 @@
+---
+- name: Smbd
+  ansible.builtin.systemd:
+    name: smbd
+    state: stopped
+    enabled: false
+    masked: true
+- name: Nmbd
+  ansible.builtin.systemd:
+    name: nmbd
+    state: stopped
+    enabled: false
+    masked: true
+- name: Winbind
+  ansible.builtin.systemd:
+    name: winbind
+    state: stopped
+    enabled: false
+    masked: true
+- name: Samba-ad-dc
+  ansible.builtin.systemd:
+    name: samba-ad-dc
+    enabled: true
+    masked: false

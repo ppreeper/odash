@@ -1,0 +1,4 @@
+#!/bin/bash
+echo $1
+VID=$1
+ffmpeg -i $VID -vf transpose=3,hflip -c:v libx264 -g 30 -qscale 6 -b 2M -c:a copy -f mp4 $VID.mp4

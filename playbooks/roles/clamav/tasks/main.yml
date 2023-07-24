@@ -1,0 +1,6 @@
+---
+- name: Clamav
+  ansible.builtin.apt:
+    name:
+      - clamav-daemon
+    state: present

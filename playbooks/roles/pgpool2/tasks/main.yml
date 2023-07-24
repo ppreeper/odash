@@ -1,0 +1,25 @@
+---
+- name: Pgpool2
+  ansible.builtin.apt:
+    name:
+      - postgresql-{{ POSTGRES_VERSION }}-pgpool2
+    state: present
+- name: Copy templates
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    owner: postgres
+    group: postgres
+  with_items:
+    - { src: "pgpool.conf", dest: "/etc/pgpool2/", mode: "0660" }
+    - { src: "pool_hba.conf", dest: "/etc/pgpool2/", mode: "0660" }
+    - { src: "pool_passwd", dest: "/etc/pgpool2/", mode: "0660" }
+    - { src: "pcp.conf", dest: "/etc/pgpool2/", mode: "0660" }
+    - { src: "pgpool_node_id", dest: "/etc/pgpool2/", mode: "0660" }
+    - { src: "pcppass", dest: "/var/lib/postgresql/.pcppass", mode: "0600" }
+    - { src: "escalation.sh", dest: "/etc/pgpool2/", mode: "0775" }
+    - { src: "failover.sh", dest: "/etc/pgpool2/", mode: "0775" }
+    - { src: "follow_primary.sh", dest: "/etc/pgpool2/", mode: "0775" }
+    - { src: "pgpool_remote_start", dest: "/etc/pgpool2/", mode: "0775" }
+    - { src: "recovery_1st_stage", dest: "/etc/pgpool2/", mode: "0775" }

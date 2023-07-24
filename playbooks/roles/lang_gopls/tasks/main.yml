@@ -1,0 +1,4 @@
+---
+- name: Install gopls
+  become_user: "{{ USER }}"
+  ansible.builtin.command: "go install golang.org/x/tools/gopls@latest"

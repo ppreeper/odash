@@ -1,0 +1,25 @@
+---
+- name: Unifi repo key
+  ansible.builtin.apt_key:
+    url: "https://dl.ui.com/unifi/unifi-repo.gpg"
+    state: present
+  when: ansible_os_family == 'Debian'
+- name: Unifi repository stat
+  ansible.builtin.stat:
+    path: "/etc/apt/sources.list.d/unifi.list"
+  register: stat_result
+  when: ansible_os_family == 'Debian'
+- name: Unifi repository add
+  ansible.builtin.apt_repository:
+    validate_certs: false
+    repo: "deb https://www.ui.com/downloads/unifi/debian stable ubiquiti"
+    state: present
+    filename: unifi
+    update_cache: true
+  when: ansible_os_family == 'Debian'
+- name: Unifi controller install
+  ansible.builtin.apt:
+    name:
+      - unifi
+    state: present
+  when: ansible_os_family == 'Debian'

@@ -1,0 +1,40 @@
+name: odash
+help: Odoo Cluster Admin Shell
+version: 0.1.0
+
+environment_variables:
+  - name: PLAYBOOK_DIR
+    private: false
+    default: ./playbooks
+
+commands:
+  - name: setup
+    help: install necessary requirements
+  - name: play
+    help: deploy ansible playbook onto guest or group
+    args:
+      - name: playbook
+        required: true
+        help: playbook to run
+      - name: target
+        help: group or guest to target
+  - name: role
+    help: deploy ansible role onto guest or group
+    args:
+      - name: role
+        required: true
+        help: role to run
+      - name: target
+        help: group or guest to target
+        default: localhost
+  - name: syntax
+    help: check the syntax of a playbook
+    args:
+      - name: playbook
+        required: true
+        help: playbook to check
+  - name: ping
+    help: ping the host or group (default all)
+    args:
+      - name: target
+        help: group or guest to target

@@ -1,0 +1,3 @@
+#!/bin/bash
+mkdir -p "${HOME}/mnt/${1}/${2}/"
+sshfs -C -o follow_symlinks -o reconnect "${1}:${2}" "${HOME}/mnt/${1}/${2}/"

@@ -1,0 +1,8 @@
+---
+- name: Odoo log dir
+  ansible.builtin.file:
+    path: /var/log/odoo
+    state: directory
+    owner: odoo
+    group: odoo
+    mode: "0775"

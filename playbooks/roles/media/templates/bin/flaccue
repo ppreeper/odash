@@ -1,0 +1,2 @@
+#!/bin/bash
+cuebreakpoints $1.cue | shnsplit -o flac $1.flac 

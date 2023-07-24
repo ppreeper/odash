@@ -1,0 +1,20 @@
+---
+- name: Python3
+  ansible.builtin.apt:
+    name:
+      - python3
+      - python3-pip
+      - python3-venv
+    state: present
+  when: ansible_os_family == 'Debian'
+
+# - name: disable python3 keyring
+#   ansible.builtin.shell:
+#     cmd: python3 -m keyring --disable
+
+- name: Pip addons
+  ansible.builtin.pip:
+    executable: pip3
+    name:
+      - python-language-server[all]
+    state: present

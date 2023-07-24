@@ -1,0 +1,41 @@
+---
+- name: Resolv update
+  ansible.builtin.replace:
+    backup: true
+    path: /etc/resolv.conf
+    regexp: "^nameserver.*"
+    replace: "nameserver {{ ansible_default_ipv4.address }}"
+- name: Smbd
+  ansible.builtin.systemd:
+    name: smbd
+    state: stopped
+    enabled: false
+    masked: true
+- name: Nmbd
+  ansible.builtin.systemd:
+    name: nmbd
+    state: stopped
+    enabled: false
+    masked: true
+- name: Winbind
+  ansible.builtin.systemd:
+    name: winbind
+    state: stopped
+    enabled: false
+    masked: true
+- name: Stat smb.conf
+  ansible.builtin.stat:
+    path: /etc/samba/smb.conf
+  register: stat_result
+- name: Remove smb.conf
+  ansible.builtin.file:
+    path: /etc/samba/smb.conf
+    state: absent
+  when: stat_result.stat.exists
+- name: Provision domain
+  ansible.builtin.command: samba-tool domain provision --use-rfc2307 --server-role=dc --dns-backend=SAMBA_INTERNAL --realm={{ realm }} --domain={{ ntdomain }} --adminpass={{ adminpass }}
+- name: Samba-ad-dc
+  ansible.builtin.systemd:
+    name: samba-ad-dc
+    enabled: true
+    masked: false

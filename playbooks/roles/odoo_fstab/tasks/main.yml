@@ -1,0 +1,16 @@
+---
+- name: Odoo nfs mount
+  ansible.builtin.file:
+    path: /opt/odoo
+    state: directory
+    owner: odoo
+    group: odoo
+    mode: "0775"
+- name: Odoo fstab nfs entries
+  ansible.builtin.blockinfile:
+    path: /etc/fstab
+    create: true
+    mode: "0644"
+    marker: "# {mark} odoo entries"
+    block: |
+      {{ odoo_data_server }}:{{ odoo_data_share }}/{{ odoo_cluster }}  {{ odoo_base }}  nfs4  rw,relatime,vers=4,rsize=8192,wsize=8192,timeo=15,user 0 0

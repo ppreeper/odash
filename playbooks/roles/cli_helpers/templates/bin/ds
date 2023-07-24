@@ -1,0 +1,9 @@
+#!/bin/bash
+DIR=""
+if [ -z "${1}" ]; then
+    DIR="."
+else
+    DIR="${1}"
+fi
+
+find "${DIR}" -maxdepth 1 -type d | sort | grep -v ^\.$ | xargs -0 | sed "s/'/\\\'/" | xargs -I {} du -s --block-size=M "{}"

@@ -1,0 +1,13 @@
+---
+- name: LXD
+  community.general.snap:
+    name: lxd
+    state: present
+  when: ansible_distribution == "Ubuntu"
+- name: Add existing user to group lxd "{{ USER }}"
+  ansible.builtin.user:
+    name: "{{ USER }}"
+    groups:
+      - lxd
+    append: true
+  when: ansible_distribution == "Ubuntu"

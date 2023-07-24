@@ -1,0 +1,7 @@
+---
+- name: Sqlite3
+  ansible.builtin.apt:
+    name:
+      - sqlite3
+    state: present
+  when: ansible_os_family == 'Debian'

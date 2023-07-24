@@ -1,0 +1,58 @@
+---
+- name: Upgrade all packages on Debian
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+    autoremove: true
+    autoclean: true
+    update_cache: true
+    cache_valid_time: 3600
+  when: ansible_os_family == 'Debian'
+
+- name: Upgrade all packages on Fedora
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+  when: ansible_distribution == 'Fedora'
+
+- name: Upgrade all packages on Centos
+  ansible.builtin.yum:
+    name: "*"
+    state: latest
+  when: ansible_distribution == 'CentOS'
+
+- name: Check snap installed
+  ansible.builtin.stat:
+    path: "/usr/bin/snap"
+  register: stat_snap
+
+- name: Update snap packages
+  ansible.builtin.command:
+    cmd: snap refresh
+  when: stat_snap.stat.exists
+
+- name: Check flatpak installed
+  ansible.builtin.stat:
+    path: "/usr/bin/flatpak"
+  register: stat_flatpak
+
+- name: Update flatpak packages
+  ansible.builtin.command:
+    cmd: flatpak update --noninteractive
+  when: stat_flatpak.stat.exists
+
+- name: Check if a reboot is needed on all servers
+  register: reboot_required_file
+  ansible.builtin.stat:
+    path: "/var/run/reboot-required"
+    get_md5: false
+
+- name: Reboot the box if kernel updated
+  ansible.builtin.reboot:
+    msg: "Reboot initiated by Ansible for kernel updates"
+    connect_timeout: 5
+    reboot_timeout: 300
+    pre_reboot_delay: 0
+    post_reboot_delay: 30
+    test_command: uptime
+  when: reboot_required_file.stat.exists

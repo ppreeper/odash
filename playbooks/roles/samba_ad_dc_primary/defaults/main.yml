@@ -1,0 +1,5 @@
+---
+domain: "example.com"
+ntdomain: "EXAMPLE"
+realm: "EXAMPLE.COM"
+adminpass: "AdminPass1234"

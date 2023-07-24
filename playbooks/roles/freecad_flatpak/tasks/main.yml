@@ -1,0 +1,12 @@
+---
+- name: Freecad
+  community.general.flatpak:
+    name: org.freecadweb.FreeCAD
+    state: present
+
+- name: Dxf2gcode
+  ansible.builtin.apt:
+    name:
+      - dxf2gcode
+    state: present
+  when: ansible_os_family == 'Debian'

@@ -1,0 +1,4 @@
+#!/bin/bash
+echo $1
+VID=$1
+ffmpeg -i $VID -c:v none -c:a none -c:s:0 srt -y $VID.srt

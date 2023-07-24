@@ -1,0 +1,5 @@
+---
+- name: Remmina
+  community.general.flatpak:
+    name: org.remmina.Remmina
+    state: present

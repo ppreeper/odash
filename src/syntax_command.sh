@@ -1,0 +1,1 @@
+ansible-playbook --syntax-check ${PLAYBOOK_DIR}/${args[playbook]}.yml

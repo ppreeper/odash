@@ -1,0 +1,165 @@
+---
+all:
+  hosts:
+    localhost:
+      ansible_connection: local
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python3"
+    home: "{{ lookup('env', 'HOME') }}"
+    config: "{{ lookup('env', 'HOME') }}/.config"
+    local: "{{ lookup('env', 'HOME') }}/.local"
+    user: "{{ lookup('env', 'USER') }}"
+    homebin: "{{ lookup('env', 'HOME') }}/.local/bin"
+  children:
+    proxmox:
+      hosts:
+        v11.preeper.org:
+          name: v11.preeper.org
+          ip_address: 10.0.30.11
+      vars:
+        proxmox_node: v11
+        proxmox_api_host: v11.preeper.org
+        proxmox_api_user: root@pam
+        proxmox_api_password: G0tAdmin
+    odoonodes:
+      hosts:
+        odoo224:
+          name: odoo224
+          ip_address: 10.0.30.224
+          vmid: 224
+        odoo230:
+          name: odoo230
+          ip_address: 10.0.30.230
+          vmid: 224
+    samba:
+      hosts:
+        fs.preeper.org:
+          name: fs.preeper.org
+        vmnas.preeper.org:
+          name: vmnas.preeper.org
+        backup.preeper.org:
+          name: backup.preeper.org
+    odoo:
+      hosts:
+        odoo.preeper.org:
+          name: odoo.preeper.org
+      vars:
+        home: "/var/lib/odoo"
+        config: "/var/lib/odoo/.config"
+        local: "/var/lib/odoo/.local"
+        user: "odoo"
+        odoodir: "/opt/odoo"
+        addonsdir: "/opt/addons"
+        odooversion: 15.0
+    patroni:
+      hosts:
+        dba.preeper.org:
+          name: dba.preeper.org
+          ip_address: 10.0.30.61
+        dbb.preeper.org:
+          name: dbb.preeper.org
+          ip_address: 10.0.30.62
+        dbc.preeper.org:
+          name: dbc.preeper.org
+          ip_address: 10.0.30.63
+      vars:
+        ansible_python_interpreter: "/usr/bin/python3"
+        home: "/home/sysadmin"
+        config: "/home/sysadmin/.config"
+        local: "/home/sysadmin/.local"
+        user: "sysadmin"
+        distro: "jammy"
+        DOMAIN: "preeper.org"
+        HOST_NET: 10.0.30.0
+        HOST_CIDR: 24
+        SSH_KEYID: id_pgpool
+        vip: "10.0.30.60"
+        POSTGRES_VERSION: "15"
+        POSTGRES_USERNAME: postgres
+        POSTGRES_PASSWORD: ArRoToGt00
+        POSTGRES_DATADIR: "/db/pgdata"
+        POSTGRES_ARCHIVE: "/db/pgarchive"
+        POSTGRES_CLUSTER: "main"
+        POSTGRES_PORT: 5433
+        pgbouncer_port: "6432"
+        PGB_PG_HOST: localhost
+        PG_PORT: 5432
+        PATRONI_ADMINPASS: "adminpass"
+        PATRONI_REPLPASS: "newpass"
+        PATRONI_SUPERUSERPASS: "newpass"
+        patroni_replication_user: "replicator"
+        patroni_replication_pass: "ArReTpGl0i0cator"
+        patroni_postgres_pass: ""
+        patroni_rewind_user: "postgres_rewind"
+        patroni_rewind_pass: "ApRoTsGt0g0res_rewind"
+        patroni_port: 8008
+        HAPROXY_POSTGRES_PORT: 5000
+        HAPROXY_POSTGRES_CLUSTER:
+          - dba.preeper.org
+          - dbb.preeper.org
+          - dbc.preeper.org
+        dcs: "etcd"
+        dcs_server_ips:
+          - 10.0.30.61
+          - 10.0.30.62
+          - 10.0.30.63
+        dcs_port:
+          consul: 8500
+          zookeeper: 2181
+          etcd: 2379
+        REPL_USERNAME: repl
+        REPL_PASSWORD: ArReTpGl00
+    pgdb:
+      hosts:
+        db.preeper.org:
+          name: db.preeper.org
+      vars:
+        ansible_python_interpreter: "/usr/bin/python3"
+        home: "/home/sysadmin"
+        config: "/home/sysadmin/.config"
+        local: "/home/sysadmin/.local"
+        user: "sysadmin"
+        distro: "bullseye"
+        POSTGRES_VERSION: "14"
+        postgresql_major_version: "14"
+        POSTGRES_USERNAME: postgres
+        POSTGRES_PASSWORD: ArRoToGt00
+        POSTGRES_DATADIR: "/db/pgdata"
+        postgresql_data_dir_base: "/db/pgdata"
+        POSTGRES_ARCHIVE: "/db/pgarchive"
+        POSTGRES_CLUSTER: "main"
+        postgresql_cluster_name: "main"
+        POSTGRES_PORT: 5433
+        postgresql_port: "5432"
+        pgbouncer_port: "6432"
+        REPL_USERNAME: repl
+        patroni_replication_user: "replicator"
+        REPL_PASSWORD: ArReTpGl00
+        patroni_replication_pass: "ArReTpGl0i0cator"
+        PGPOOL_USERNAME: pgpool
+        PGPOOL_PASSWORD: ApRoToHl00
+        PGPOOL_PORT: 5432
+        PGPOOL_PCP_PORT: 9898
+        PGPOOL_WD_PORT: 9000
+        PGPOOL_HEARTBEAT_PORT: 9694
+        PGPOOL_VIP: 10.0.100.120
+        NETIF_COMMON: enp129s0f0
+        HOST_NET: 10.0.100.0
+        HOST_CIDR: 24
+        SSH_KEYID: id_pgpool
+        dcs: "etcd"
+        dcs_server_ips:
+          - 10.0.100.121
+          - 10.0.100.122
+          - 10.0.100.123
+        dcs_port:
+          consul: 8500
+          zookeeper: 2181
+          etcd: 2379
+        consul_datacenter: "edm"
+        consul_group: "consul"
+        patroni_postgres_pass: ""
+        patroni_rewind_user: "postgres_rewind"
+        patroni_rewind_pass: "ApRoTsGt0g0res_rewind"
+        patroni_port: 8008
+        vip: "10.0.100.120"

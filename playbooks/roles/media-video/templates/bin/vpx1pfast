@@ -1,0 +1,2 @@
+#!/bin/bash
+vpxenc $1 -o $1.webm --codec=vp8 --i420 -w 1280 -h 720 -p 1 -t 4 --good --cpu-used=3 --target-bitrate=2000 --end-usage=vbr --fps=30000/1001 -v --kf-min-dist=0 --kf-max-dist=360 --token-parts=2 --static-thresh=1000 --min-q=0 --max-q=63

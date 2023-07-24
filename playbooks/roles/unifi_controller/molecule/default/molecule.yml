@@ -1,0 +1,16 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+platforms:
+  - name: instance_unifi_controller
+    image: ubuntu:20.04
+provisioner:
+  name: ansible
+verifier:
+  name: ansible

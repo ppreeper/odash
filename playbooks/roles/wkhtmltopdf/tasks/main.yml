@@ -1,0 +1,6 @@
+---
+- name: Wkhtmltopdf
+  ansible.builtin.apt:
+    deb: "{{ repo }}/{{ version }}/wkhtmltox_{{ version }}.{{ ansible_lsb.codename | lower }}_amd64.deb"
+    state: present
+  when: ansible_os_family == 'Debian' and ansible_lsb.codename != 'elsie'

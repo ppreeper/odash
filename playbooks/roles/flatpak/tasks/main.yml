@@ -1,0 +1,15 @@
+---
+# install flatpak
+- name: Install flatpak
+  ansible.builtin.apt:
+    name:
+      - flatpak
+    state: present
+    update_cache: true
+  when: ansible_os_family == 'Debian'
+# install flathub repo
+- name: Install flathub repo
+  community.general.flatpak_remote:
+    name: flathub
+    state: present
+    flatpakrepo_url: "https://flathub.org/repo/flathub.flatpakrepo"

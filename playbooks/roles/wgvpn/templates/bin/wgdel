@@ -1,0 +1,3 @@
+#!/bin/sh
+CONF="$1"
+sudo nmcli connection delete "$CONF"
